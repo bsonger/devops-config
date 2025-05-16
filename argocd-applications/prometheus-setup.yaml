@@ -18,3 +18,4 @@ spec:
       selfHeal: true       # 如果资源被修改，自动纠正
     syncOptions:
       - CreateNamespace=true
+      - ServerSideApply=true
