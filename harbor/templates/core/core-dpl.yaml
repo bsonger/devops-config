@@ -110,11 +110,13 @@ spec:
                 {{- else }}
                 key: JOBSERVICE_SECRET
                 {{- end }}
+          {{- if .Values.existingSecretAdminPassword }}
           - name: HARBOR_ADMIN_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: harbor-core
+                name: {{ .Values.existingSecretAdminPassword }}
                 key: {{ .Values.existingSecretAdminPasswordKey }}
+          {{- end }}
           {{- if .Values.internalTLS.enabled }}
           - name: INTERNAL_TLS_ENABLED
             value: "true"
