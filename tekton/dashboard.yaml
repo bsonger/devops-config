@@ -219,7 +219,7 @@ metadata:
   name: tekton-dashboard
   namespace: tekton-pipelines
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
     - name: http
       port: 9097
