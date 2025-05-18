@@ -4,11 +4,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: "{{ template "harbor.registry" . }}"
-  namespace: {{ .Release.Namespace | quote }}
   labels:
 {{ include "harbor.labels" . | indent 4 }}
     component: registry
-    app.kubernetes.io/component: registry
 spec:
   replicas: {{ .Values.registry.replicas }}
   revisionHistoryLimit: {{ .Values.registry.revisionHistoryLimit }}
@@ -26,7 +24,6 @@ spec:
       labels:
 {{ include "harbor.labels" . | indent 8 }}
         component: registry
-        app.kubernetes.io/component: registry
 {{- if .Values.registry.podLabels }}
 {{ toYaml .Values.registry.podLabels | indent 8 }}
 {{- end }}
@@ -67,10 +64,6 @@ spec:
             component: registry
 {{- end }}
 {{- end }}
-      {{- with .Values.registry.initContainers }}
-      initContainers:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       containers:
       - name: registry
         image: {{ .Values.registry.registry.image.repository }}:{{ .Values.registry.registry.image.tag }}
@@ -93,9 +86,7 @@ spec:
         resources:
 {{ toYaml .Values.registry.registry.resources | indent 10 }}
 {{- end }}
-        {{- if not (empty .Values.containerSecurityContext) }}
-        securityContext: {{ .Values.containerSecurityContext | toYaml | nindent 10 }}
-        {{- end }}
+        args: ["serve", "/etc/registry/config.yml"]
         envFrom:
         - secretRef:
             name: "{{ template "harbor.registry" . }}"
@@ -175,7 +166,7 @@ spec:
 {{- end }}
         ports:
         - containerPort: {{ template "harbor.registry.containerPort" . }}
-        - containerPort: {{ ternary .Values.metrics.registry.port 5001 .Values.metrics.enabled }}
+        - containerPort: 5001
         volumeMounts:
         - name: registry-data
           mountPath: {{ .Values.persistence.imageChartStorage.filesystem.rootdirectory }}
@@ -231,9 +222,6 @@ spec:
         resources:
 {{ toYaml .Values.registry.controller.resources | indent 10 }}
 {{- end }}
-        {{- if not (empty .Values.containerSecurityContext) }}
-        securityContext: {{ .Values.containerSecurityContext | toYaml | nindent 10 }}
-        {{- end }}
         envFrom:
         - configMapRef:
             name: "{{ template "harbor.registryCtl" . }}"
