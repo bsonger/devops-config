@@ -1814,7 +1814,7 @@ hubble:
       # -- Annotations to be added for the Hubble UI service
       annotations: {}
       # --- The type of service used for Hubble UI access, either ClusterIP or NodePort.
-      type: ClusterIP
+      type: NodePort
       # --- The port to use when the service type is set to NodePort.
       nodePort: 31235
     # -- Defines base url prefix for all hubble-ui http requests.
