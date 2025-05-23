@@ -3,32 +3,44 @@ kind: Task
 metadata:
   name: kaniko-build-push
 spec:
+  description: 使用 Kaniko 构建并推送镜像到 Harbor（使用 harbor-auth secret）
   params:
-    - name: image
+    - name: IMAGE
+      description: 目标镜像（例如 harbor.example.com/project/image:tag）
       type: string
+    - name: DOCKERFILE
+      description: Dockerfile 文件名（默认：Dockerfile）
+      type: string
+      default: Dockerfile
+    - name: CONTEXT
+      description: Build context 路径（默认：.）
+      type: string
+      default: .
   workspaces:
     - name: source
-    - name: dockerconfig
+      description: 源代码目录（包含 Dockerfile）
   steps:
     - name: build-and-push
       image: gcr.io/kaniko-project/executor:v1.22.0
       env:
         - name: DOCKER_CONFIG
-          value: /workspace/dockerconfig
-      args:
-        - --dockerfile=Dockerfile
-        - --context=/workspace/source
-        - --destination=$(params.image)
-        - --snapshotMode=time
+          value: /kaniko/.docker/
+      script: |
+        #!/busybox/sh
+        echo "🚀 使用 Kaniko 构建镜像：$(params.IMAGE)"
+        /kaniko/executor \
+          --dockerfile=$(workspaces.source.path)/$(params.DOCKERFILE) \
+          --context=$(workspaces.source.path)/$(params.CONTEXT) \
+          --destination=$(params.IMAGE) \
+          --snapshotMode=time \
+          --verbosity=info
       volumeMounts:
         - name: docker-config
-          mountPath: /workspace/dockerconfig
+          mountPath: /kaniko/.docker/
   volumes:
     - name: docker-config
-      projected:
-        sources:
-          - secret:
-              name: harbor-dockerconfig
-              items:
-                - key: config.json
-                  path: config.json
+      secret:
+        secretName: harbor-auth
+        items:
+          - key: .dockerconfigjson
+            path: config.json
