@@ -1,0 +1,31 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: argocd-sync
+spec:
+  params:
+    - name: argocd-server
+      type: string
+    - name: argocd-app
+      type: string
+    - name: image-tag
+      type: string
+  steps:
+    - name: login-set-sync
+      image: argoproj/argocd:v2.11.0
+      script: |
+        #!/usr/bin/env sh
+        set -e
+        TOKEN=$(cat /var/run/argocd/token)
+        echo "🔐 Logging in to Argo CD..."
+        argocd login $(params.argocd-server) --insecure --sso-token $TOKEN
+        echo "🔄 Updating image tag and syncing..."
+        argocd app set $(params.argocd-app) --parameter image.tag=$(params.image-tag)
+        argocd app sync $(params.argocd-app) --timeout 300
+      volumeMounts:
+        - name: argocd-token
+          mountPath: /var/run/argocd
+  volumes:
+    - name: argocd-token
+      secret:
+        secretName: argocd-auth-token

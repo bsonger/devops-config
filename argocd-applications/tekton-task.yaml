@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tekton-tasks
+  namespace: argo
+spec:
+  project: default
+  source:
+    repoURL: git@github.com:bsonger/devops-config.git
+    targetRevision: main
+    path: ./tekton/tasks
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: tekton-pipelines
+  syncPolicy:
+    automated:
+      prune: true          # 自动删除未在 Git 中定义的资源
+      selfHeal: true       # 如果资源被修改，自动纠正
+    syncOptions:
+      - CreateNamespace=true
