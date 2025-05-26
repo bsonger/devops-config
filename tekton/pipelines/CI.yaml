@@ -1,0 +1,38 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: ci
+spec:
+  params:
+    - {name: git-url,        type: string}
+    - {name: git-revision,   type: string,  default: main}
+    - {name: image-registry, type: string}
+    - {name: image-name,     type: string}
+    - {name: image-tag,      type: string,  default: latest}
+  workspaces:
+    - {name: source}
+    - {name: dockerconfig}
+  tasks:
+    - name: clone
+      taskRef: {name: git-clone}
+      params:
+        - {name: url,      value: $(params.git-url)}
+        - {name: revision, value: $(params.git-revision)}
+      workspaces:
+        - {name: output, workspace: source}
+
+    - name: build-and-push
+      runAfter: [clone]
+      taskRef: {name: kaniko-build-push}
+      params:
+        - name: image
+          value: $(params.image-registry)/$(params.image-name):$(params.image-tag)
+      workspaces:
+        - {name: source,       workspace: source}
+        - {name: dockerconfig, workspace: dockerconfig}
+
+  finally:
+    - name: notify
+      taskRef: {name: notify}
+      params:
+        - {name: message, value: "🎉 Pipeline $(context.pipelineRun.name) finished."}
