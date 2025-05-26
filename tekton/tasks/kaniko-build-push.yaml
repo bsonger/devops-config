@@ -5,7 +5,7 @@ metadata:
 spec:
   description: 使用 Kaniko 构建并推送镜像到 Harbor（使用 harbor-auth secret）
   params:
-    - name: image
+    - name: IMAGE
       description: 目标镜像（例如 harbor.example.com/project/image:tag）
       type: string
     - name: DOCKERFILE

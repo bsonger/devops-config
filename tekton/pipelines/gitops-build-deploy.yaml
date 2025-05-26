@@ -27,7 +27,7 @@ spec:
       runAfter: [clone]
       taskRef: {name: kaniko-build-push}
       params:
-        - name: image
+        - name: IMAGE
           value: $(params.image-registry)/$(params.image-name):$(params.image-tag)
       workspaces:
         - {name: source,       workspace: source}
