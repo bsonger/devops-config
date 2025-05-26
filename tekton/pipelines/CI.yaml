@@ -30,9 +30,3 @@ spec:
       workspaces:
         - {name: source,       workspace: source}
         - {name: dockerconfig, workspace: dockerconfig}
-
-  finally:
-    - name: notify
-      taskRef: {name: notify}
-      params:
-        - {name: message, value: "🎉 Pipeline $(context.pipelineRun.name) finished."}
