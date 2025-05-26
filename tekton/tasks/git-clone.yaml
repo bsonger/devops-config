@@ -23,6 +23,13 @@ spec:
         git clone $(params.url) --branch $(params.revision) --depth 1 /workspace/output
         cd /workspace/output
         git rev-parse HEAD | tee $(results.commit.path)
+      env:
+        - name: HTTP_PROXY
+          value: http://192.168.1.5:7890
+        - name: HTTPS_PROXY
+          value: http://192.168.1.5:7890
+        - name: NO_PROXY
+          value: localhost,127.0.0.1,.svc,.cluster.local
       securityContext:
         runAsNonRoot: true
         allowPrivilegeEscalation: false
