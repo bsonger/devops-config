@@ -16,7 +16,7 @@ spec:
       description: git commit SHA
   steps:
     - name: clone
-      image: alpine/git:2.44
+      image: alpine/git:latest
       script: |
         #!/bin/sh
         set -e
