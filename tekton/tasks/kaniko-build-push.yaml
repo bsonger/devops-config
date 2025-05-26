@@ -37,6 +37,14 @@ spec:
       volumeMounts:
         - name: docker-config
           mountPath: /kaniko/.docker/
+      securityContext:
+        runAsNonRoot: true
+        allowPrivilegeEscalation: false
+        seccompProfile:
+          type: RuntimeDefault
+        capabilities:
+          drop:
+            - ALL
   volumes:
     - name: docker-config
       secret:

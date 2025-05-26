@@ -23,3 +23,11 @@ spec:
         git clone $(params.url) --branch $(params.revision) --depth 1 /workspace/output
         cd /workspace/output
         git rev-parse HEAD | tee $(results.commit.path)
+      securityContext:
+        runAsNonRoot: true
+        allowPrivilegeEscalation: false
+        seccompProfile:
+          type: RuntimeDefault
+        capabilities:
+          drop:
+            - ALL
