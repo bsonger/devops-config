@@ -270,6 +270,12 @@ backstage:
       listen:
         port: 7000
         host: 0.0.0.0
+    techdocs:
+      builder: 'local'
+      generator:
+        runIn: 'local'
+      publisher:
+        type: 'local'
   # -- Generates ConfigMap and configures it in the Backstage pods
 #  appConfig: {}
 
