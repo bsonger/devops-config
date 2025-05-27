@@ -18,6 +18,7 @@ spec:
   steps:
     - name: clone
       image: bitnami/git:latest
+      imagePullPolicy: IfNotPresent
       script: |
         #!/bin/sh
         set -e

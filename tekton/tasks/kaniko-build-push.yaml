@@ -2,6 +2,7 @@ apiVersion: tekton.dev/v1
 kind: Task
 metadata:
   name: kaniko-build-push
+  namespace: tekton-pipelines
 spec:
   description: 使用 Kaniko 构建并推送镜像到 Harbor（使用 harbor-auth secret）
   params:
@@ -19,28 +20,35 @@ spec:
   workspaces:
     - name: source
       description: 源代码目录（包含 Dockerfile）
+    - name: dockerconfig
+      description: Harbor 登录 Secret（应为包含 config.json 的 Secret）
+      mountPath: /kaniko/.docker/   # ✅ 让 Tekton 自动挂载这个 workspace 到该路径
   steps:
+    - name: check-docker-config
+      image: alpine
+      imagePullPolicy: IfNotPresent
+      script: |
+        echo "🔍 /kaniko/.docker 目录内容:"
+        ls -al /kaniko/.docker
+        echo "📄 config.json 内容:"
+        cat /kaniko/.docker/config.json || echo "❌ config.json 不存在"
     - name: build-and-push
       image: gcr.io/kaniko-project/executor:v1.22.0
+      imagePullPolicy: IfNotPresent
       env:
         - name: DOCKER_CONFIG
           value: /kaniko/.docker/
-      script: |
-        #!/busybox/sh
-        echo "🚀 使用 Kaniko 构建镜像：$(params.IMAGE)"
-        /kaniko/executor \
-          --dockerfile=$(workspaces.source.path)/$(params.DOCKERFILE) \
-          --context=$(workspaces.source.path)/$(params.CONTEXT) \
-          --destination=$(params.IMAGE) \
-          --snapshotMode=time \
-          --verbosity=info
-      volumeMounts:
-        - name: docker-config
-          mountPath: /kaniko/.docker/
-  volumes:
-    - name: docker-config
-      secret:
-        secretName: harbor-auth
-        items:
-          - key: .dockerconfigjson
-            path: config.json
+        - name: HTTP_PROXY
+          value: http://192.168.1.5:7890
+        - name: HTTPS_PROXY
+          value: http://192.168.1.5:7890
+        - name: NO_PROXY
+          value: localhost,127.0.0.1,.svc,.cluster.local
+      command:
+        - /kaniko/executor
+      args:
+        - --dockerfile=$(workspaces.source.path)/$(params.DOCKERFILE)
+        - --context=$(workspaces.source.path)/$(params.CONTEXT)
+        - --destination=$(params.IMAGE)
+        - --snapshot-mode=time
+        - --verbosity=info
