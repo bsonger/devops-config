@@ -263,8 +263,13 @@ backstage:
   # DO NOT USE if you need to put sensitive data in the appConfig.
   # E.g:
   appConfig:
-   app:
-     baseUrl: http://192.168.1.4:30003
+    app:
+      baseUrl: http://192.168.1.4:30003
+    backend:
+      baseUrl: http://192.168.1.4:30003
+      listen:
+        port: 7000
+        host: 0.0.0.0
   # -- Generates ConfigMap and configures it in the Backstage pods
 #  appConfig: {}
 
