@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 nameOverride: ""
-fullnameOverride: ""
+fullnameOverride: "collector"
 
 # Valid values are "daemonset", "deployment", and "statefulset".
 mode: "deployment"
