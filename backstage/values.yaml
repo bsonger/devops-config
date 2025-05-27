@@ -262,11 +262,11 @@ backstage:
   # automatically, not requiring to have it pre provisioned as with the extraAppConfig key.
   # DO NOT USE if you need to put sensitive data in the appConfig.
   # E.g:
-  # appConfig:
-  #   app:
-  #     baseUrl: https://somedomain.tld
+  appConfig:
+   app:
+     baseUrl: http://192.168.1.4:30003
   # -- Generates ConfigMap and configures it in the Backstage pods
-  appConfig: {}
+#  appConfig: {}
 
   # -- Affinity for pod assignment
   # <br /> Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
