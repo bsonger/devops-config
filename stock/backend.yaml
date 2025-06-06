@@ -38,7 +38,13 @@ spec:
           volumeMounts:
             - name: supervisor-config
               mountPath: /data/supervisor
+            - name: backend-data
+              mountPath: /data/stock
       volumes:
         - name: supervisor-config
           configMap:
             name: supervisor-config
+        - name: backend-data
+          hostPath:
+            path: /root/stock/backend  # ✅ 主机目录路径
+            type: backend-data
