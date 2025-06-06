@@ -78,9 +78,6 @@ spec:
         - name: config
           configMap:
             name: mysql-config
-        - name: init-sql
-          configMap:
-            name: mysql-init
   volumeClaimTemplates:
     - metadata:
         name: data
