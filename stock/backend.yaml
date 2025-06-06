@@ -35,3 +35,10 @@ spec:
               value: zh_CN.UTF-8
             - name: PYTHONIOENCODING
               value: utf-8
+          volumeMounts:
+            - name: backend-supervisor
+              mountPath: /data/supervisor
+      volumes:
+        - name: supervisor-config
+          configMap:
+            name: supervisor-config
