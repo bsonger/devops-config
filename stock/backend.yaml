@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: 192.168.1.4:30002/library/stock-backend:v3.0
+          ports:
+            - containerPort: 8888
+            - containerPort: 9090
+          env:
+            - name: MYSQL_HOST
+              value: mysql.stock.svc.cluster.local
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PWD
+              value: mysql
+            - name: MYSQL_DB
+              value: stock_data
+            - name: MYSQL_PORT
+              value: "3306"
+            - name: LANG
+              value: zh_CN.UTF-8
+            - name: LC_CTYPE
+              value: zh_CN.UTF-8
+            - name: PYTHONIOENCODING
+              value: utf-8
