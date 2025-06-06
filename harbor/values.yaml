@@ -198,7 +198,7 @@ persistence:
     jobservice:
       jobLog:
         existingClaim: ""
-        storageClass: "local-path
+        storageClass: "local-path"
         subPath: ""
         accessMode: ReadWriteOnce
         size: 1Gi
