@@ -198,7 +198,7 @@ persistence:
     jobservice:
       jobLog:
         existingClaim: ""
-        storageClass: ""
+        storageClass: "local-path
         subPath: ""
         accessMode: ReadWriteOnce
         size: 1Gi
@@ -207,7 +207,7 @@ persistence:
     # be ignored
     database:
       existingClaim: ""
-      storageClass: ""
+      storageClass: "local-path"
       subPath: ""
       accessMode: ReadWriteOnce
       size: 1Gi
@@ -216,14 +216,14 @@ persistence:
     # be ignored
     redis:
       existingClaim: ""
-      storageClass: ""
+      storageClass: "local-path"
       subPath: ""
       accessMode: ReadWriteOnce
       size: 1Gi
       annotations: {}
     trivy:
       existingClaim: ""
-      storageClass: ""
+      storageClass: "local-path"
       subPath: ""
       accessMode: ReadWriteOnce
       size: 5Gi
