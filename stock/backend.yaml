@@ -47,4 +47,4 @@ spec:
         - name: backend-data
           hostPath:
             path: /root/stock/backend  # ✅ 主机目录路径
-            type: backend-data
+            type: Directory
