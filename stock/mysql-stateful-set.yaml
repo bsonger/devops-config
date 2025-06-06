@@ -46,9 +46,6 @@ spec:
               subPath: my.cnf
             - name: data
               mountPath: /var/lib/mysql
-            - name: init-sql
-              mountPath: /docker-entrypoint-initdb.d/init.sql
-              subPath: init.sql
           readinessProbe:
             exec:
               command:
