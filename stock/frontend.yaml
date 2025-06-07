@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: node:18-alpine  # 使用官方 node 镜像支持 npm
+          command: ["/usr/src/app/docker-entrypoint.sh"]
+          ports:
+            - containerPort: 8080
+          workingDir: /usr/src/app
+          env:
+            - name: LANG
+              value: zh_CN.UTF-8
+            - name: LC_CTYPE
+              value: zh_CN.UTF-8
+          volumeMounts:
+            - name: frontend-src
+              mountPath: /usr/src/app
+            - name: data
+              mountPath: /data/html/
+      volumes:
+        - name: frontend-src
+          hostPath:
+            path: /usr/src/app  # 请替换为你实际的本地路径
+            type: Directory
+        - name: data
+          hostPath:
+            path: /data/html/  # 请替换为你实际的本地路径
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  selector:
+    app: frontend
+  ports:
+    - port: 8080
+      targetPort: 8080
+  type: NodePort
