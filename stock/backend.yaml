@@ -48,3 +48,17 @@ spec:
           hostPath:
             path: /root/stock/backend  # ✅ 主机目录路径
             type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  selector:
+    app: frontend
+  ports:
+    - port: 8080
+      targetPort: 8080
+    - port: 9090
+      targetPort: 9090
+  type: ClusterIP

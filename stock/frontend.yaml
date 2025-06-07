@@ -33,7 +33,7 @@ spec:
       volumes:
         - name: frontend-src
           hostPath:
-            path: /usr/src/app  # 请替换为你实际的本地路径
+            path: /root/stock/frontend  # 请替换为你实际的本地路径
             type: Directory
         - name: data
           hostPath:
