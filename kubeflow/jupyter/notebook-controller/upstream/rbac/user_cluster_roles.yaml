@@ -1,14 +1,15 @@
-#apiVersion: rbac.authorization.k8s.io/v1
-#kind: ClusterRole
-#metadata:
-#  name: kubeflow-notebooks-admin
-#  labels:
-#    rbac.authorization.kubeflow.org/aggregate-to-kubeflow-admin: "true"
-#aggregationRule:
-#  clusterRoleSelectors:
-#  - matchLabels:
-#      rbac.authorization.kubeflow.org/aggregate-to-kubeflow-notebooks-admin: "true"
-#rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kubeflow-notebooks-admin
+  labels:
+    rbac.authorization.kubeflow.org/aggregate-to-kubeflow-admin: "true"
+aggregationRule:
+  clusterRoleSelectors:
+  - matchLabels:
+      rbac.authorization.kubeflow.org/aggregate-to-kubeflow-notebooks-admin: "true"
+rules: []
 
 ---
 
