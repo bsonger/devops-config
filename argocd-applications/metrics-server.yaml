@@ -12,7 +12,7 @@ spec:
     # 可选：显式指定使用Kustomize（Argo CD会自动识别，可不写）
   destination:
     server: https://kubernetes.default.svc  # 目标集群（本地集群）
-    namespace: dev  # 部署到的目标命名空间（需与overlay中一致）
+    namespace: default  # 部署到的目标命名空间（需与overlay中一致）
   syncPolicy:
     automated:  # 自动同步（Git变更后自动部署）
       prune: true  # 自动删除Git中已移除的资源
