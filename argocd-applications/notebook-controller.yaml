@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default  # 所属Argo CD项目（默认即可）
   source:
-    repoURL: https://github.com/kubeflow/manifests  # Git仓库地址
+    repoURL: git@github.com:bsonger/devops-config.git  # Git仓库地址
     targetRevision: v1.10.2  # 分支或Tag
-    path: applications/jupyter/notebook-controller/upstream/overlays/standalone  # Kustomize overlay路径（开发环境）
+    path: kubeflow/jupyter/notebook-controller/upstream/overlays/standalone  # Kustomize overlay路径（开发环境）
     # 可选：显式指定使用Kustomize（Argo CD会自动识别，可不写）
   destination:
     server: https://kubernetes.default.svc  # 目标集群（本地集群）
