@@ -165,7 +165,7 @@ spec:
         {{- end }}
         {{- end }}
         - containerPort: 80    # 新增：与 CEC 监听器端口一致
-          hostPort: 30080      # 节点端口（自定义，如 30080）
+          hostPort: 80      # 节点端口（自定义，如 80）
           name: http-business
           protocol: TCP
         securityContext:
