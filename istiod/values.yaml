@@ -14,7 +14,7 @@ _internal_defaults_do_not_set:
   variant: ""
 
   # Can be a full hub/image:tag
-  image: pilot
+  image: istio/pilot
   traceSampling: 1.0
 
   # Resources for a small pilot install
@@ -316,7 +316,7 @@ _internal_defaults_do_not_set:
     priorityClassName: ""
 
     proxy:
-      image: proxyv2
+      image: istio/proxyv2
 
       # This controls the 'policy' in the sidecar injector.
       autoInject: enabled
@@ -396,7 +396,7 @@ _internal_defaults_do_not_set:
 
     proxy_init:
       # Base name for the proxy_init container, used to configure iptables.
-      image: proxyv2
+      image: istio/proxyv2
       # Bypasses iptables idempotency handling, and attempts to apply iptables rules regardless of table state, which may cause unrecoverable failures.
       # Do not use unless you need to work around an issue of the idempotency handling. This flag will be removed in future releases.
       forceApplyIptables: false
