@@ -9,9 +9,6 @@ spec:
     repoURL: git@github.com:bsonger/devops-config.git
     targetRevision: main
     path: ./kube-state-metrics
-    helm:
-      valueFiles:
-        - values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
