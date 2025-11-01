@@ -29,7 +29,7 @@ a unique prefix to each. */}}
     apiGroups: [""]
     apiVersions: ["v1"]
     resources: ["pods"]
-  failurePolicy: Fail
+#  failurePolicy: Fail
   reinvocationPolicy: "{{ .reinvocationPolicy }}"
   admissionReviewVersions: ["v1"]
 {{- end }}
