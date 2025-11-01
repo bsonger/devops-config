@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jupyter-web-app  # Argo CD应用名称
+  namespace: argo-cd  # Argo CD自身的命名空间
+spec:
+  project: default  # 所属Argo CD项目（默认即可）
+  source:
+    repoURL: git@github.com:bsonger/devops-config.git  # Git仓库地址
+    targetRevision: main  # 分支或Tag
+    path: kubeflow/jupyter/jupyter-web-app/upstream/base  # Kustomize overlay路径（开发环境）
+    # 可选：显式指定使用Kustomize（Argo CD会自动识别，可不写）
+  destination:
+    server: https://kubernetes.default.svc  # 目标集群（本地集群）
+#    namespace: default  # 部署到的目标命名空间（需与overlay中一致）
+  syncPolicy:
+    automated:  # 自动同步（Git变更后自动部署）
+      prune: true  # 自动删除Git中已移除的资源
+      selfHeal: true  # 集群资源被手动修改后，自动恢复为Git配置
