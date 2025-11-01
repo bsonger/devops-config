@@ -1,0 +1,15 @@
+# cilium-gateway.yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: cilium
+  namespace: kube-system  # 与 Cilium 同命名空间
+spec:
+  gatewayClassName: cilium  # 指定使用 Cilium GatewayClass
+  listeners:
+  - name: http  # 监听名称
+    protocol: HTTP  # 协议
+    port: 80  # Envoy 监听的端口（内部端口，外部通过节点端口暴露）
+    allowedRoutes:
+      namespaces:
+        from: All  # 允许路由来自所有命名空间的服务
