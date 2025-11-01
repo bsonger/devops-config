@@ -284,12 +284,10 @@ spec:
         {{- if .Values.authentication.mutual.spire.enabled }}
         - name: spire-agent-socket
           mountPath: {{ dir .Values.authentication.mutual.spire.adminSocketPath }}
-          readOnly: false
         {{- end }}
         {{- if $envoyDS }}
         - name: envoy-sockets
           mountPath: /var/run/cilium/envoy/sockets
-          readOnly: false
         {{- end }}
         {{- if not .Values.securityContext.privileged }}
         # Unprivileged containers need to mount /proc/sys/net from the host
