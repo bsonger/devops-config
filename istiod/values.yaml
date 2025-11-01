@@ -14,7 +14,7 @@ _internal_defaults_do_not_set:
   variant: ""
 
   # Can be a full hub/image:tag
-  image: istio/pilot
+  image: istio/pilot:1.27.3
   traceSampling: 1.0
 
   # Resources for a small pilot install
