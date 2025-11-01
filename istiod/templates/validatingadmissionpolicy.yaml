@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/name: "istiod"
     {{- include "istio.labels" . | nindent 4 }}
 spec:
-  failurePolicy: Fail
+#  failurePolicy: Fail
   matchConstraints:
     resourceRules:
     - apiGroups:
