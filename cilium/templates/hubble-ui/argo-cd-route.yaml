@@ -17,5 +17,5 @@ spec:
         value: /  # 匹配所有路径
     backendRefs:
     - name: hubble-ui
-      namespace: argo-cd  # 服务所在命名空间
+      namespace: kube-system  # 服务所在命名空间
       port: 80
