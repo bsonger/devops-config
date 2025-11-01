@@ -1,0 +1,17 @@
+# bei-wildcard-cert.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: bei-cert
+  namespace: istio-system  # 需与 Gateway 同命名空间
+spec:
+  secretName: bei-tls  # 证书存储的 Secret 名称（供 Gateway 使用）
+  commonName: "*.bei.com"       # 通配符域名
+  dnsNames:
+  - "*.bei.com"                 # 支持所有子域名
+  issuerRef:
+    name: selfsigned-issuer     # 测试用：关联自签 CA
+    # name: letsencrypt-prod    # 生产用：关联 Let's Encrypt
+    kind: ClusterIssuer         # 签发者类型（ClusterIssuer 或 Issuer）
+  duration: 17520h  # 2 年 = 730 天 × 24 小时/天 = 17520 小时
+  renewBefore: 720h  # 提前 30 天续期（避免过期）

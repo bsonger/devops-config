@@ -1,4 +1,5 @@
 # cilium-gateway.yaml
+----------
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
@@ -13,3 +14,26 @@ spec:
     allowedRoutes:
       namespaces:
         from: All  # 允许路由来自所有命名空间的服务
+
+---------
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: https
+  namespace: istio-system
+spec:
+  gatewayClassName: istio
+  listeners:
+  - name: https
+    port: 443
+    protocol: HTTPS
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: bei-tls  # 证书仍限制域名，仅关联证书
+        namespace: istio-system
+    allowedRoutes:
+      namespaces:
+        from: All  # 允许所有命名空间的路由关联到此网关
