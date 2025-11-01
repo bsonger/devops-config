@@ -9,7 +9,7 @@ spec:
   listeners:
   - name: http  # 监听名称
     protocol: HTTP  # 协议
-    port: 80  # Envoy 监听的端口（内部端口，外部通过节点端口暴露）
+    port: 30080  # Envoy 监听的端口（内部端口，外部通过节点端口暴露）
     allowedRoutes:
       namespaces:
         from: All  # 允许路由来自所有命名空间的服务
