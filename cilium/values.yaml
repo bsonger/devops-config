@@ -446,7 +446,7 @@ l2podAnnouncements:
 # CiliumBGPPeeringPolicy CRDs.
 bgpControlPlane:
   # -- Enables the BGP control plane.
-  enabled: false
+  enabled: true
   # -- SecretsNamespace is the namespace which BGP support will retrieve secrets from.
   secretsNamespace:
     # -- Create secrets namespace for BGP secrets.
