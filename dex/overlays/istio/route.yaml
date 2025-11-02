@@ -17,5 +17,5 @@ spec:
         value: /  # 匹配所有路径
     backendRefs:
     - name: dex
-      namespace: dex  # 服务所在命名空间
+      namespace: auth  # 服务所在命名空间
       port: 5556
