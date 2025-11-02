@@ -5,6 +5,7 @@ namespace: auth
 resources:
 - ../../base
 - virtual-service.yaml
+- route.yaml
 
 replacements:
 - source:
