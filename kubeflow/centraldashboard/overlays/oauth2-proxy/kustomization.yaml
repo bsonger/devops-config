@@ -6,4 +6,4 @@ resources:
 -  ../../upstream/overlays/kserve
 
 components:
-- deployment.logout-url.yaml
+- ./deployment.logout-url.yaml
