@@ -4,6 +4,7 @@ resources:
 - ../../base
 - virtual-service.yaml
 - authorizationpolicy.yaml
+- route.yaml
 namespace: kubeflow
 replacements:
 - source:
