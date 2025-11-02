@@ -6,4 +6,4 @@ resources:
 -  ../../upstream/overlays/kserve
 
 components:
-- ../../../../common/oauth2-proxy/components/central-dashboard
+- deployment.logout-url.yaml
