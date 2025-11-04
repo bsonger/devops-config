@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: git@github.com:bsonger/devops-config.git  # Git仓库地址
     targetRevision: main  # 分支或Tag
-    path: kubeflow/jupyter/jupyter-web-app/upstream/base  # Kustomize overlay路径（开发环境）
+    path: kubeflow/jupyter/jupyter-web-app/upstream/overlays/istio  # Kustomize overlay路径（开发环境）
     # 可选：显式指定使用Kustomize（Argo CD会自动识别，可不写）
   destination:
     server: https://kubernetes.default.svc  # 目标集群（本地集群）
