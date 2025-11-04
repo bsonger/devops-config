@@ -14,11 +14,7 @@ spec:
     rewrite:
       uri: /
     route:
-#    - destination:
-#        host: centraldashboard.CD_NAMESPACE_PLACEHOLDER.svc.CD_CLUSTER_DOMAIN_PLACEHOLDER
-#        port:
-#          number: 80
-      - destination:
-          host: oauth2-proxy.oauth2-proxy.svc.cluster.local
-          port:
-            number: 80
+    - destination:
+        host: centraldashboard.CD_NAMESPACE_PLACEHOLDER.svc.CD_CLUSTER_DOMAIN_PLACEHOLDER
+        port:
+          number: 80

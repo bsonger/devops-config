@@ -6,45 +6,45 @@ resources:
 - authorizationpolicy.yaml
 - route.yaml
 namespace: kubeflow
-#replacements:
-#- source:
-#    fieldPath: metadata.namespace
-#    kind: Service
-#    name: centraldashboard
-#    version: v1
-#  targets:
-#  - fieldPaths:
-#    - spec.http.0.route.0.destination.host
-#    options:
-#      delimiter: .
-#      index: 1
-#    select:
-#      group: networking.istio.io
-#      kind: VirtualService
-#      name: centraldashboard
-#      version: v1alpha3
-#- source:
-#    fieldPath: data.CD_CLUSTER_DOMAIN
-#    kind: ConfigMap
-#    name: centraldashboard-parameters
-#    version: v1
-#  targets:
-#  - fieldPaths:
-#    - spec.http.0.route.0.destination.host
-#    options:
-#      delimiter: .
-#      index: 3
-#    select:
-#      group: networking.istio.io
-#      kind: VirtualService
-#      name: centraldashboard
-#      version: v1alpha3
-#configurations:
-#- params.yaml
-#labels:
-#- includeSelectors: true
-#  pairs:
-#    app: centraldashboard
-#    app.kubernetes.io/component: centraldashboard
-#    app.kubernetes.io/name: centraldashboard
-#    kustomize.component: centraldashboard
+replacements:
+- source:
+    fieldPath: metadata.namespace
+    kind: Service
+    name: centraldashboard
+    version: v1
+  targets:
+  - fieldPaths:
+    - spec.http.0.route.0.destination.host
+    options:
+      delimiter: .
+      index: 1
+    select:
+      group: networking.istio.io
+      kind: VirtualService
+      name: centraldashboard
+      version: v1alpha3
+- source:
+    fieldPath: data.CD_CLUSTER_DOMAIN
+    kind: ConfigMap
+    name: centraldashboard-parameters
+    version: v1
+  targets:
+  - fieldPaths:
+    - spec.http.0.route.0.destination.host
+    options:
+      delimiter: .
+      index: 3
+    select:
+      group: networking.istio.io
+      kind: VirtualService
+      name: centraldashboard
+      version: v1alpha3
+configurations:
+- params.yaml
+labels:
+- includeSelectors: true
+  pairs:
+    app: centraldashboard
+    app.kubernetes.io/component: centraldashboard
+    app.kubernetes.io/name: centraldashboard
+    kustomize.component: centraldashboard
