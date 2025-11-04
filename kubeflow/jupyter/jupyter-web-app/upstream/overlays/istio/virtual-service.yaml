@@ -34,6 +34,8 @@ spec:
   - match:
     - uri:
         prefix: /jupyter/
+    rewrite:
+      uri: /
     route:
     - destination:
         host: oauth2-proxy.oauth2-proxy.svc.cluster.local
