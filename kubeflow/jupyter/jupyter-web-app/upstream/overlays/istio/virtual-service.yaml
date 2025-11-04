@@ -33,6 +33,8 @@ spec:
   # 规则2：其他 /jupyter/ 路径的请求，先转发到 oauth2-proxy 认证
   - match:
     - uri:
+        prefix: /_/jupyter/
+    - uri:
         prefix: /jupyter/
     rewrite:
       uri: /
