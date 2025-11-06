@@ -47,3 +47,4 @@ spec:
       request:
         add:
           x-forwarded-prefix: /jupyter  # 保留 Jupyter 所需前缀
+          X-Upstream: "jupyter-web-app-service.kubeflow.svc.cluster.local:80"
