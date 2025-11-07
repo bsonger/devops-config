@@ -8,15 +8,19 @@ spec:
   hosts:
   - 'kubeflow.bei.com'
   http:
-  - headers:
-      request:
-        add:
-          x-forwarded-prefix: /jupyter
-    match:
+  - match:
+    - uri:
+        prefix: /dex
+    route:
+    - destination:
+        host: dex.auth.svc.cluster.local
+        port:
+          number: 5556
+  - match:
     - uri:
         prefix: /
     route:
     - destination:
-        host: jupyter-web-app-service.$(JWA_NAMESPACE).svc.$(JWA_CLUSTER_DOMAIN)
+        host: oauth2-proxy.kubeflow.svc.cluster.local
         port:
           number: 80
