@@ -14,7 +14,7 @@ spec:
         - values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: kube-system
+    namespace: backstage
   syncPolicy:
     automated:
       prune: true          # 自动删除未在 Git 中定义的资源
