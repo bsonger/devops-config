@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: centraldashboard  # Argo CD应用名称
+  name: istio-ingress  # Argo CD应用名称
   namespace: argo-cd  # Argo CD自身的命名空间
 spec:
-  project: kubeflow  # 所属Argo CD项目（默认即可）
+  project: default  # 所属Argo CD项目（默认即可）
   source:
     repoURL: git@github.com:bsonger/kubeflow.git  # Git仓库地址
     targetRevision: v1.10.2  # 分支或Tag
     path: common/istio/istio-install/overlays/oauth2-proxy # Kustomize overlay路径（开发环境）
   destination:
     server: https://kubernetes.default.svc  # 目标集群（本地集群）
-#    namespace: default  # 部署到的目标命名空间（需与overlay中一致）
+    namespace: kubeflow  # 部署到的目标命名空间（需与overlay中一致）
   syncPolicy:
     automated:  # 自动同步（Git变更后自动部署）
       prune: true  # 自动删除Git中已移除的资源
