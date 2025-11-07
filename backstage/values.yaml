@@ -125,7 +125,7 @@ backstage:
     # -- Specify a imagePullPolicy.
     # Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     # <br /> Ref: https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
 
     # -- Optionally specify an array of imagePullSecrets.
     #  Secrets must be manually created in the namespace.
@@ -139,6 +139,15 @@ backstage:
     create: false
     minAvailable: ""
     maxUnavailable: ""
+
+  # -- Autoscaling configuration.
+  # <br /> Ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
 
   # -- Container ports on the Deployment
   containerPorts:
@@ -262,22 +271,11 @@ backstage:
   # automatically, not requiring to have it pre provisioned as with the extraAppConfig key.
   # DO NOT USE if you need to put sensitive data in the appConfig.
   # E.g:
-  appConfig:
-    app:
-      baseUrl: http://192.168.1.4:30003
-    backend:
-      baseUrl: http://192.168.1.4:30003
-      listen:
-        port: 7000
-        host: 0.0.0.0
-    techdocs:
-      builder: 'local'
-      generator:
-        runIn: 'local'
-      publisher:
-        type: 'local'
+  # appConfig:
+  #   app:
+  #     baseUrl: https://somedomain.tld
   # -- Generates ConfigMap and configures it in the Backstage pods
-#  appConfig: {}
+  appConfig: {}
 
   # -- Affinity for pod assignment
   # <br /> Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
@@ -321,7 +319,7 @@ backstage:
 service:
 
   # -- Kubernetes Service type
-  type: NodePort
+  type: ClusterIP
 
   # -- Backstage svc port for client connections
   ports:
@@ -336,7 +334,7 @@ service:
   # -- Node port for the Backstage client connections
   # Choose port between `30000-32767`
   nodePorts:
-    backend: "30003"
+    backend: ""
 
   # -- Control where client requests go, to the same pod or round-robin
   # (values: `ClientIP` or `None`)
@@ -424,6 +422,11 @@ postgresql:
 
   # -- Switch to enable or disable the PostgreSQL helm chart
   enabled: false
+
+  # -- Change default PostgreSQL image location (workaround for https://github.com/bitnami/charts/issues/35164)
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/postgresql
 
   # -- The authentication details of the Postgres database
   auth:
