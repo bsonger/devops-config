@@ -125,7 +125,7 @@ config:
     
     redirect_url = "/oauth2/callback"
     relative_redirect_url = true
-    client_id = kubeflow-oidc-authservice  # 替换为实际ID
+    client_id = "kubeflow-oidc-authservice"  # 替换为实际ID
     client_secret = "pUBnBOY80SnXgjibTYM9ZWNzY2xreNGQok"  # 替换为实际密钥
 #    email_domains = [ "*" ]
 #    upstreams = [ "file:///dev/null" ]
