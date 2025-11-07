@@ -21,6 +21,6 @@ spec:
         prefix: /
     route:
     - destination:
-        host: oauth2-proxy.kubeflow.svc.cluster.local
+        host: oauth2-proxy-kubeflow.kubeflow.svc.cluster.local
         port:
           number: 80
