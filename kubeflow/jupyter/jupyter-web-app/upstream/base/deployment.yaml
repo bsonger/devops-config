@@ -33,6 +33,8 @@ spec:
           value: "X-Forwarded-For, X-Forwarded-Proto, X-Auth-Request-User"
         - name: TRUSTED_PROXIES
           value: "*"  # 测试环境临时放宽，生产环境改为 oauth2-proxy 网段
+        - name: DISABLE_USER_AUTH
+          value: "true"
       serviceAccountName: service-account
       volumes:
       - configMap:
