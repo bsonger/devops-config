@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
 - ../../base
 - virtual-service.yaml
-- authorizationpolicy.yaml
+#- authorizationpolicy.yaml
 namespace: kubeflow
 replacements:
 - source:
