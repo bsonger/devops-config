@@ -21,16 +21,18 @@ spec:
           value: $(JWA_PREFIX)
         - name: UI
           value: $(JWA_UI)
-#        - name: USERID_HEADER
-#          value: $(JWA_USERID_HEADER)
-#        - name: USERID_PREFIX
-#          value: $(JWA_USERID_PREFIX)
+        - name: USERID_HEADER
+          value: $(JWA_USERID_HEADER)
+        - name: USERID_PREFIX
+          value: $(JWA_USERID_PREFIX)
         - name: APP_SECURE_COOKIES
           value: $(JWA_APP_SECURE_COOKIES)
         - name: METRICS
           value: $(JWA_APP_ENABLE_METRICS)
         - name: PROXY_HEADERS
           value: "X-Forwarded-For, X-Forwarded-Proto, X-Auth-Request-User"
+        - name: TRUSTED_PROXIES
+          value: "*"  # 测试环境临时放宽，生产环境改为 oauth2-proxy 网段
       serviceAccountName: service-account
       volumes:
       - configMap:
