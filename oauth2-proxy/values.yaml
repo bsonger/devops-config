@@ -53,7 +53,7 @@ config:
     
     # serve a static HTTP 200 upstream on for authentication success
     # we are using oauth2-proxy as an ExtAuthz to "check" each request, not pass it on
-    upstreams = [ "static://200" ]
+    upstreams = [ "http://prometheus-k8s.monitoring.svc.cluster.local:9090" ]
     
     # skip authentication for these paths
     skip_auth_routes = [
