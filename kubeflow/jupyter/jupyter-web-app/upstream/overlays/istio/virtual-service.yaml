@@ -14,9 +14,7 @@ spec:
           x-forwarded-prefix: /jupyter
     match:
     - uri:
-        prefix: /jupyter/
-    rewrite:
-      uri: /
+        prefix: /
     route:
     - destination:
         host: jupyter-web-app-service.$(JWA_NAMESPACE).svc.$(JWA_CLUSTER_DOMAIN)
