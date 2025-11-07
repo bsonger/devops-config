@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: oauth2-proxy
+  name: oauth2-proxy-kubeflow
   namespace: argo-cd
 spec:
   project: default

@@ -6,7 +6,7 @@ spec:
   gateways:
   - kubeflow-gateway
   hosts:
-  - '*'
+  - 'kubeflow.bei.com'
   http:
   - headers:
       request:
