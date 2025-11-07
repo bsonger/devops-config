@@ -1,13 +1,6 @@
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
-  annotations:
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"networking.istio.io/v1alpha3","kind":"VirtualService","metadata":{"annotations":{},"labels":{"argocd.argoproj.io/instance":"dex"},"name":"dex","namespace":"auth"},"spec":{"gateways":["kubeflow/kubeflow-gateway"],"hosts":["*"],"http":[{"match":[{"uri":{"prefix":"/dex/"}}],"route":[{"destination":{"host":"dex.auth.svc.cluster.local","port":{"number":5556}}}]}]}}
-  creationTimestamp: "2025-11-07T17:01:16Z"
-  generation: 1
-  labels:
-    argocd.argoproj.io/instance: dex
   name: prometheus
   namespace: monitoring
   resourceVersion: "4382399"
