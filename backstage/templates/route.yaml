@@ -18,4 +18,4 @@ spec:
     backendRefs:
     - name: backstage   # Prometheus 服务名称
       namespace: backstage  # 服务所在命名空间
-      port: http-backend  # 服务端口（与步骤 2 中一致）
+      port: 7007  # 服务端口（与步骤 2 中一致）
