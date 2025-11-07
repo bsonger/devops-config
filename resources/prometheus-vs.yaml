@@ -13,6 +13,14 @@ spec:
   http:
   - match:
     - uri:
+        prefix: /dex
+    route:
+    - destination:
+        host: dex.auth.svc.cluster.local
+        port:
+          number: 5556
+  - match:
+    - uri:
         prefix: /
     route:
     - destination:

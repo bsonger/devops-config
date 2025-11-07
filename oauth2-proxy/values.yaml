@@ -123,7 +123,7 @@ config:
     
     code_challenge_method = "S256"
     
-    redirect_url = "oauth2/callback"
+    redirect_url = "/oauth2/callback"
     relative_redirect_url = true
 #    email_domains = [ "*" ]
 #    upstreams = [ "file:///dev/null" ]
