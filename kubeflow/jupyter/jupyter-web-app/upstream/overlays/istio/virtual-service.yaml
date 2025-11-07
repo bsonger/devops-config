@@ -4,7 +4,7 @@ metadata:
   name: jupyter-web-app-jupyter-web-app
 spec:
   gateways:
-  - kubeflow-gateway
+  - kubeflow/kubeflow-gateway
   hosts:
   - 'kubeflow.bei.com'
   http:
