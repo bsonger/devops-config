@@ -29,6 +29,8 @@ spec:
           value: $(JWA_APP_SECURE_COOKIES)
         - name: METRICS
           value: $(JWA_APP_ENABLE_METRICS)
+        - name: PROXY_HEADERS
+          value: "X-Forwarded-For, X-Forwarded-Proto, X-Auth-Request-User"
       serviceAccountName: service-account
       volumes:
       - configMap:
