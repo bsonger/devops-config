@@ -94,7 +94,7 @@ config:
     
     # style the sign-in page
     provider_display_name = "Dex"
-    custom_sign_in_logo = "/custom-theme/kubeflow-logo.svg"
+    #custom_sign_in_logo = "/custom-theme/kubeflow-logo.svg"
     banner = "-"
     footer = "-"
     
