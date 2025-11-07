@@ -8,8 +8,7 @@ spec:
   source:
     repoURL: git@github.com:bsonger/devops-config.git  # Git仓库地址
     targetRevision: main  # 分支或Tag
-    path: dex/overlays/oauth2-proxy  # Kustomize overlay路径（开发环境）
-    # 可选：显式指定使用Kustomize（Argo CD会自动识别，可不写）
+    path: dex/overlays/oauth2-proxy
   destination:
     server: https://kubernetes.default.svc  # 目标集群（本地集群）
 #    namespace: default  # 部署到的目标命名空间（需与overlay中一致）
