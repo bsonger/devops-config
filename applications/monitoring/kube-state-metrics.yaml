@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: git@github.com:bsonger/devops-config.git
     targetRevision: main
-    path: ./kube-state-metrics
+    path: ./monitoring/kube-state-metrics
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring

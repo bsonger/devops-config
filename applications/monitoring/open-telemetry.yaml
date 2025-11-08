@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: git@github.com:bsonger/devops-config.git
     targetRevision: main
-    path: ./opentelemetry-collector
+    path: ./monitoring/opentelemetry-collector
     helm:
       valueFiles:
         - values.yaml

@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: git@github.com:bsonger/devops-config.git
     targetRevision: main
-    path: ./node-exporter
+    path: ./monitoring/node-exporter
   destination:
     server: https://kubernetes.default.svc
     namespace: default
