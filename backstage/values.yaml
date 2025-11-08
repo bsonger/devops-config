@@ -277,7 +277,11 @@ backstage:
   #   app:
   #     baseUrl: https://somedomain.tld
   # -- Generates ConfigMap and configures it in the Backstage pods
-  appConfig: {}
+  appConfig:
+    backend:
+      auth:
+        # 临时允许不带 token 的请求通过
+        dangerouslyAllowUnauthenticated: true
 
   # -- Affinity for pod assignment
   # <br /> Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
