@@ -429,6 +429,12 @@ loki:
     #   ruler: FIXME
     #   admin: FIXME
     type: filesystem
+    backend:
+      enabled: false
+    read:
+      enabled: false
+    write:
+      enabled: false
     s3:
       s3: null
       endpoint: null
