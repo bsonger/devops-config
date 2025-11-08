@@ -415,7 +415,7 @@ loki:
   # -- Check https://grafana.com/docs/loki/latest/configuration/#common_config for more info on how to provide a common configuration
   commonConfig:
     path_prefix: /var/loki
-    replication_factor: 3
+    replication_factor: 1
     # -- The gRPC address of the compactor. The use of compactor_grpc_address is prefered over compactor_address.
     # If a customized compactor_address is set, compactor_grpc_address should be set to an empty string.
     compactor_grpc_address: '{{ include "loki.compactorAddress" . }}'
@@ -429,12 +429,6 @@ loki:
     #   ruler: FIXME
     #   admin: FIXME
     type: filesystem
-    backend:
-      enabled: false
-    read:
-      enabled: false
-    write:
-      enabled: false
     s3:
       s3: null
       endpoint: null
@@ -554,7 +548,11 @@ loki:
     #   local:
     #     directory: /etc/loki/rules
   # -- Structured loki configuration, takes precedence over `loki.config`, `loki.schemaConfig`, `loki.storageConfig`
-  structuredConfig: {}
+  structuredConfig:
+    compactor:
+      working_directory: /var/loki/compactor
+      shared_store: filesystem
+      retention_enabled: true
   # -- Additional query scheduler config
   query_scheduler: {}
   # -- Additional storage config

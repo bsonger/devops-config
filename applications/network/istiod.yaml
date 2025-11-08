@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: git@github.com:bsonger/devops-config.git
     targetRevision: main
-    path: ./istiod
+    path: ./network/istiod
     helm:
       valueFiles:
         - values.yaml

@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: git@github.com:bsonger/devops-config.git
     targetRevision: main
-    path: ./cilium
+    path: ./network/cilium
     helm:
       valueFiles:
         - values.yaml

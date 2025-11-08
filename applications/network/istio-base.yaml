@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: git@github.com:bsonger/devops-config.git
     targetRevision: main
-    path: ./istio-base
+    path: ./network/istio-base
     helm:
       valueFiles:
         - values.yaml
