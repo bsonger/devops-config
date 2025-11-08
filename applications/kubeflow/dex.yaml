@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: git@github.com:bsonger/devops-config.git  # Git仓库地址
     targetRevision: main  # 分支或Tag
-    path: ./dex/overlays/oauth2-proxy
+    path: ./security/dex/overlays/oauth2-proxy
   destination:
     server: https://kubernetes.default.svc  # 目标集群（本地集群）
 #    namespace: default  # 部署到的目标命名空间（需与overlay中一致）

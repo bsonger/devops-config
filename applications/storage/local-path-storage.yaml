@@ -1,20 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cert-manager
+  name: local-path-storage
   namespace: argo-cd
 spec:
   project: default
   source:
     repoURL: git@github.com:bsonger/devops-config.git
     targetRevision: main
-    path: ./cert-manager
-    helm:
-      valueFiles:
-        - values.yaml
+    path: ./storage/local-path-storage
   destination:
     server: https://kubernetes.default.svc
-    namespace: cert-manager
+    namespace: local-path-storage
   syncPolicy:
     automated:
       prune: true          # 自动删除未在 Git 中定义的资源
