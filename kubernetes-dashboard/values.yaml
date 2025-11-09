@@ -263,7 +263,9 @@ web:
     # Full list of arguments: https://github.com/kubernetes/dashboard/blob/master/docs/common/arguments.md
     # args:
     # - --system-banner="Welcome to the Kubernetes Dashboard"
-    args: []
+    args:
+      - --auto-generate-certificates
+      - --enable-skip-login
     # Additional container environment variables
     # env:
     # - name: SOME_VAR
