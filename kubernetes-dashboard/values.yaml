@@ -257,17 +257,6 @@ web:
   containers:
     ports:
       - name: web
-        lifecycle:
-          postStart:
-            exec:
-              command:
-                - sh
-                - -c
-                - ulimit -n 65535
-        securityContext:
-          runAsNonRoot: true
-          runAsUser: 1001
-          runAsGroup: 2001
         containerPort: 8000
         protocol: TCP
     # Additional container arguments
@@ -275,6 +264,17 @@ web:
     # args:
     # - --system-banner="Welcome to the Kubernetes Dashboard"
     args: []
+    lifecycle:
+      postStart:
+        exec:
+          command:
+            - sh
+            - -c
+            - ulimit -n 65535
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 1001
+      runAsGroup: 2001
     # Additional container environment variables
     # env:
     # - name: SOME_VAR
