@@ -1,20 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: opentelemetry-operator
+  name: kubernetes-dashboard
   namespace: argo-cd
 spec:
   project: default
   source:
     repoURL: git@github.com:bsonger/devops-config.git
     targetRevision: main
-    path: ./monitoring/opentelemetry-operator
+    path: ./kubernetes-dashboard
     helm:
       valueFiles:
         - values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: open-telemetry
+    namespace: kube-system
   syncPolicy:
     automated:
       prune: true          # 自动删除未在 Git 中定义的资源
