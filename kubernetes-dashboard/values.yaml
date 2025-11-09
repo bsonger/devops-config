@@ -257,6 +257,17 @@ web:
   containers:
     ports:
       - name: web
+        lifecycle:
+          postStart:
+            exec:
+              command:
+                - sh
+                - -c
+                - ulimit -n 65535
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 2001
         containerPort: 8000
         protocol: TCP
     # Additional container arguments
