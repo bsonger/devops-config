@@ -1,21 +1,26 @@
-# prometheus-httproute.yaml
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: kubernetes-dashboard
-  namespace: kube-system  # 与 Prometheus 服务同命名空间（可选，也可在其他命名空间）
+  namespace: kube-system
 spec:
   parentRefs:
-  - name: https  # 关联上一步创建的 Gateway
-    namespace: istio-system  # Gateway 所在的命名空间
+  - name: https
+    namespace: istio-system
   hostnames:
-  - "kubernetes-dashboard.bei.com"  # 外部访问的域名（需解析到集群节点 IP）
+  - "kubernetes-dashboard.bei.com"
   rules:
   - matches:
     - path:
         type: PathPrefix
-        value: /  # 匹配所有路径
+        value: /
+    filters:
+    - type: RequestHeaderModifier
+      requestHeaderModifier:
+        set:
+        - name: Authorization
+          value: "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IkgyTTVDRDVyaWVYV0l2dmVMdUNqb01KUndtWnYtZ1hjUXBPUGlpTHJqM3MifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWwiXSwiZXhwIjoxNzk0MjY5MTYxLCJpYXQiOjE3NjI3MzMxNjEsImlzcyI6Imh0dHBzOi8va3ViZXJuZXRlcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwianRpIjoiZjc0NjZiYzgtNzA0OS00MjI4LTg5MzMtZDU1MTdmZTcyOWZhIiwia3ViZXJuZXRlcy5pbyI6eyJuYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsInNlcnZpY2VhY2NvdW50Ijp7Im5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZC13ZWIiLCJ1aWQiOiIxOGNjMzBmYy1kMjE4LTRlMWMtODNkNy0wNWMyYTk2NzNkZjgifX0sIm5iZiI6MTc2MjczMzE2MSwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmUtc3lzdGVtOmt1YmVybmV0ZXMtZGFzaGJvYXJkLXdlYiJ9.Np2D86UoQ3oGhCUxO4RQ7ZNnMMvQWA83Mrp42FVkNwhcXO0b3OCawaOiJbb6wSQEGkIkTJPK9kdx2mCcShh19AT5garbWgnlMHryhrWeh1R0eBnfQeC3XNaqOUGvixdhUwQKR1nS6WFaHMKUFsSb3NCCi_-lvieXihdGIi_IFcyzJ8Be5xn34uJOqfPhC3H7m1Vh7ROJX94fTc5I_DtLm15eIHj32SHx7sxJ7NwVvNxkpP_xAPv7J6JvfCPuJw5ziuAZ90NCvER_h7E8ZR9qEfoGud4F0-te2q1ZBeebu76HVDpD59H1dLcKTbITzFxNhNSBi10QEyBLkqmc2oLLTA"
     backendRefs:
     - name: kubernetes-dashboard-kong-proxy
-      namespace: kube-system  # 服务所在命名空间
-      port: 443
+      namespace: kube-system
+      port: 80
