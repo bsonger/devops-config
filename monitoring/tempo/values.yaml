@@ -121,7 +121,6 @@ tempo:
         access_key: 3ItWE9jHmhIqz2Bk2Ho4                                 # optional. access key when using static credentials.
         secret_key: jLG8LAnawBZreKFRifPHHmBUjPmklZhDSk0Vl8BB                                 # optional. secret key when using static credentials.
         insecure: true                                 # optional. enable if endpoint is http
-        s3_force_path_style: true  # 关键：MinIO 必须开启路径风格访问（endpoint/bucket）
       #      backend: local
 #      local:
 #        path: /var/tempo/traces
