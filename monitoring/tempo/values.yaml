@@ -120,7 +120,9 @@ tempo:
         endpoint: "minio.minio.svc.cluster.local:443"  # api endpoint
         access_key: 3ItWE9jHmhIqz2Bk2Ho4                                 # optional. access key when using static credentials.
         secret_key: jLG8LAnawBZreKFRifPHHmBUjPmklZhDSk0Vl8BB                                 # optional. secret key when using static credentials.
-        insecure: true                                 # optional. enable if endpoint is http
+        insecure: false                                 # optional. enable if endpoint is http
+        http_config:
+          insecure_skip_verify: true
       #      backend: local
 #      local:
 #        path: /var/tempo/traces
