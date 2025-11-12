@@ -113,15 +113,15 @@ tempo:
       # tempo storage backend.
       # Refers to: https://grafana.com/docs/tempo/latest/configuration/#storage
       ## Use s3 for example
-      # backend: s3
+      backend: s3
       # store traces in s3
-      # s3:
-      #   bucket: <your s3 bucket>                        # store traces in this bucket
-      #   endpoint: s3.dualstack.us-east-2.amazonaws.com  # api endpoint
-      #   access_key: ...                                 # optional. access key when using static credentials.
-      #   secret_key: ...                                 # optional. secret key when using static credentials.
-      #   insecure: false                                 # optional. enable if endpoint is http
-      backend: local
+      s3:
+        bucket: tempo                        # store traces in this bucket
+        endpoint: "https://minio.minio:443"  # api endpoint
+        access_key: 3ItWE9jHmhIqz2Bk2Ho4                                 # optional. access key when using static credentials.
+        secret_key: jLG8LAnawBZreKFRifPHHmBUjPmklZhDSk0Vl8BB                                 # optional. secret key when using static credentials.
+        insecure: true                                 # optional. enable if endpoint is http
+#      backend: local
       local:
         path: /var/tempo/traces
       wal:
