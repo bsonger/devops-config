@@ -533,11 +533,11 @@ loki:
   schema_config:
     configs:
       - from: "2024-01-01"  # 日志数据起始时间（可自定义）
-        store: boltdb-shipper  # 存储引擎（兼容 S3/MinIO）
+        store: tsdb  # 存储引擎（兼容 S3/MinIO）
         object_store: s3  # 与 storage.type 一致
-        schema: v11  # 最新稳定 schema 版本
+        schema: v13  # 最新稳定 schema 版本
         index:
-          prefix: loki_index_  # 索引文件前缀（在 MinIO 中可见）
+          prefix: index_  # 索引文件前缀（在 MinIO 中可见）
           period: 24h  # 每天生成一个索引分片
   # -- a real Loki install requires a proper schemaConfig defined above this, however for testing or playing around
   # you can enable useTestSchema
