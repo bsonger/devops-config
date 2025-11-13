@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: alloy
+  namespace: argo-cd
+spec:
+  project: default
+  source:
+    repoURL: git@github.com:bsonger/devops-config.git
+    targetRevision: main
+    path: ./monitoring/alloy
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true          # 自动删除未在 Git 中定义的资源
+      selfHeal: true       # 如果资源被修改，自动纠正
+    syncOptions:
+      - CreateNamespace=true
