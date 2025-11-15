@@ -1346,7 +1346,7 @@ persistence:
   ## If undefined (the default) or set to null, no storageClassName spec is
   ## set, choosing the default provisioner.
   ##
-  storageClass: ""
+  storageClass: "local-path"
   ## @param persistence.accessModes PV Access Mode
   ##
   accessModes:
