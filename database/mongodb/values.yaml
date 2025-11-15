@@ -2565,7 +2565,7 @@ metrics:
       prometheus.io/path: "/metrics"
     ## @param metrics.service.type Type of the Prometheus metrics service
     ##
-    type: ClusterIP
+    type: NodePort
     ## @param metrics.service.ports.metrics Port of the Prometheus metrics service
     ##
     ports:
