@@ -775,7 +775,7 @@ service:
   nameOverride: ""
   ## @param service.type Kubernetes Service type (only for standalone architecture)
   ##
-  type: ClusterIP
+  type: NodePort
   ## @param service.portName MongoDB(&reg;) service port name (only for standalone architecture)
   ##
   portName: mongodb
@@ -2565,7 +2565,7 @@ metrics:
       prometheus.io/path: "/metrics"
     ## @param metrics.service.type Type of the Prometheus metrics service
     ##
-    type: NodePort
+    type: ClusterIP
     ## @param metrics.service.ports.metrics Port of the Prometheus metrics service
     ##
     ports:
