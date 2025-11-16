@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
-  name: gitops-build-deploy
+  name: devflow-ci
   namespace: tekton-pipelines
 spec:
   params:
@@ -10,8 +10,7 @@ spec:
     - {name: image-registry, type: string}
     - {name: image-name,     type: string}
     - {name: image-tag,      type: string,  default: latest}
-    - {name: argocd-server,  type: string}
-    - {name: argocd-app,     type: string}
+    - {name: DOCKERFILE,      type: string,  default: Dockerfile}
   workspaces:
     - {name: source}
     - {name: dockerconfig}
@@ -24,24 +23,17 @@ spec:
       workspaces:
         - {name: output, workspace: source}
 
-    - name: build-and-push
+    - name: buildah-build-push
       runAfter: [clone]
-      taskRef: {name: kaniko-build-push}
+      taskRef: {name: buildah-build-push}
       params:
         - name: IMAGE
           value: $(params.image-registry)/$(params.image-name):$(params.image-tag)
+        - name: DOCKERFILE
+          value: $(params.DOCKERFILE)
       workspaces:
         - {name: source,       workspace: source}
         - {name: dockerconfig, workspace: dockerconfig}
-
-    - name: argocd-sync
-      runAfter: [build-and-push]
-      taskRef: {name: argocd-sync}
-      params:
-        - {name: argocd-server, value: $(params.argocd-server)}
-        - {name: argocd-app,    value: $(params.argocd-app)}
-        - {name: image-tag,     value: $(params.image-tag)}
-
   finally:
     - name: notify
       taskRef: {name: notify}

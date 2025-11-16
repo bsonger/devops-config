@@ -1,13 +1,13 @@
 apiVersion: tekton.dev/v1
 kind: Task
 metadata:
-  name: kaniko-build-push
+  name: buildah-build-push
   namespace: tekton-pipelines
 spec:
-  description: 使用 Kaniko 构建并推送镜像到 Harbor（使用 harbor-auth secret）
+  description: 使用 Buildah 构建并推送镜像到 Harbor（使用 harbor-auth secret）
   params:
     - name: IMAGE
-      description: 目标镜像（例如 harbor.example.com/project/image:tag）
+      description: 目标镜像（例如 registry.cn-hangzhou.aliyuncs.com/project/image:tag）
       type: string
     - name: DOCKERFILE
       description: Dockerfile 文件名（默认：Dockerfile）
@@ -22,7 +22,7 @@ spec:
       description: 源代码目录（包含 Dockerfile）
     - name: dockerconfig
       description: Harbor 登录 Secret（应为包含 config.json 的 Secret）
-      mountPath: /kaniko/.docker/   # ✅ 让 Tekton 自动挂载这个 workspace 到该路径
+      mountPath: /kaniko/.docker/   # Tekton 自动挂载这个 workspace 到该路径
   steps:
     - name: check-docker-config
       image: alpine
@@ -30,25 +30,29 @@ spec:
       script: |
         echo "🔍 /kaniko/.docker 目录内容:"
         ls -al /kaniko/.docker
-        echo "📄 config.json 内容:"
-        cat /kaniko/.docker/config.json || echo "❌ config.json 不存在"
-    - name: build-and-push
-      image: gcr.io/kaniko-project/executor:v1.22.0
+        echo "📄 .dockerconfigjson 内容:"
+        cat /kaniko/.docker/.dockerconfigjson || echo "❌ .dockerconfigjson 不存在"
+        ls -lh $(workspaces.source.path)
+
+    - name: build
+      image: quay.io/buildah/stable:latest
       imagePullPolicy: IfNotPresent
+      securityContext:
+        privileged: true
       env:
-        - name: DOCKER_CONFIG
-          value: /kaniko/.docker/
+        - name: REGISTRY_AUTH_FILE
+          value: /kaniko/.docker/.dockerconfigjson  # Buildah 读取这个文件进行认证
         - name: HTTP_PROXY
           value: http://192.168.1.5:7890
         - name: HTTPS_PROXY
           value: http://192.168.1.5:7890
         - name: NO_PROXY
           value: localhost,127.0.0.1,.svc,.cluster.local
-      command:
-        - /kaniko/executor
-      args:
-        - --dockerfile=$(workspaces.source.path)/$(params.DOCKERFILE)
-        - --context=$(workspaces.source.path)/$(params.CONTEXT)
-        - --destination=$(params.IMAGE)
-        - --snapshot-mode=time
-        - --verbosity=info
+      script: |
+        #!/bin/sh
+        set -e
+        echo "🔧 构建镜像: $(params.IMAGE)"
+        buildah bud -f $(workspaces.source.path)/$(params.DOCKERFILE) \
+                    -t $(params.IMAGE) \
+                    $(workspaces.source.path)
+        buildah push $(params.IMAGE)

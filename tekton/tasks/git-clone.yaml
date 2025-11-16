@@ -22,8 +22,10 @@ spec:
       script: |
         #!/bin/sh
         set -e
-        git clone $(params.url) --branch $(params.revision) --depth 1 /workspace/output
-        cd /workspace/output
+        rm -rf $(workspaces.output.path)/.git*
+        rm -rf $(workspaces.output.path)/* 
+        git clone $(params.url) --branch $(params.revision) --depth 1 $(workspaces.output.path)
+        cd $(workspaces.output.path)
         git rev-parse HEAD | tee $(results.commit.path)
       env:
         - name: HTTP_PROXY
