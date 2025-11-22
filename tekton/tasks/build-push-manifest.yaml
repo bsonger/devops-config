@@ -1,0 +1,38 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: build-push-manifest
+  namespace: tekton-pipelines
+spec:
+  params:
+    - name: name
+      type: string
+    - name: manifest-name
+      type: manifest-name
+  workspaces:
+    - name: source
+  steps:
+    - name: clone
+      image: bitnami/git:latest
+      imagePullPolicy: IfNotPresent
+      script: |
+        #!/bin/sh
+        set -e
+        git clone $(params.url) --depth 1 
+        
+        git clone https://github.com/bsonger/manifests.git
+        mkdir -p manifests/${params.name}/${params.manifest-name}/base
+        mkdir -p manifests/${params.name}/${params.manifest-name}/overlays/dev
+        mkdir -p manifests/${params.name}/${params.manifest-name}/overlays/prod
+
+        for f in /template/base/*.tpl; do
+          envsubst < $f > manifests/${params.name}/${params.manifest-name}/$(basename $f .tpl)
+        done
+        ls -lh manifests/${params.name}/${params.manifest-name}/base
+      env:
+        - name: HTTP_PROXY
+          value: http://192.168.1.5:7890
+        - name: HTTPS_PROXY
+          value: http://192.168.1.5:7890
+        - name: NO_PROXY
+          value: localhost,127.0.0.1,.svc,.cluster.local

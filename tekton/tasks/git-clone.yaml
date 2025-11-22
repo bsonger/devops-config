@@ -22,7 +22,7 @@ spec:
       script: |
         #!/bin/sh
         set -e
-        rm -rf $(workspaces.output.path)/.git*
+        rm -rf $(workspaces.output.path)/.*
         rm -rf $(workspaces.output.path)/* 
         git clone $(params.url) --branch $(params.revision) --depth 1 $(workspaces.output.path)
         cd $(workspaces.output.path)

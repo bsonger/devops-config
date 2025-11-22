@@ -1,0 +1,10 @@
+resources:
+  - ../../base
+generatorOptions:
+  disableNameSuffixHash: true
+configMapGenerator:
+  - name: ${APP_NAME}
+    namespace: app
+    files:
+      - prod.yaml
+    behavior: replace

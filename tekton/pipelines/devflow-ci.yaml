@@ -8,7 +8,7 @@ spec:
     - {name: git-url,        type: string}
     - {name: git-revision,   type: string,  default: main}
     - {name: image-registry, type: string}
-    - {name: image-name,     type: string}
+    - {name: name,           type: string}
     - {name: image-tag,      type: string,  default: latest}
     - {name: DOCKERFILE,      type: string,  default: Dockerfile}
   workspaces:
@@ -28,12 +28,24 @@ spec:
       taskRef: {name: buildah-build-push}
       params:
         - name: IMAGE
-          value: $(params.image-registry)/$(params.image-name):$(params.image-tag)
+          value: $(params.image-registry)/$(params.name):$(params.image-tag)
         - name: DOCKERFILE
           value: $(params.DOCKERFILE)
       workspaces:
         - {name: source,       workspace: source}
         - {name: dockerconfig, workspace: dockerconfig}
+    - name: build-push-manifest
+      runAfter: [buildah-build-push]
+      taskRef:
+        name: build-push-manifest
+      params:
+        - name: name
+          value: ${params.name}
+        - name: manifest-name
+          value: ${params.manifest-name}
+      workspaces:
+        - name: source
+          workspace: source
   finally:
     - name: notify
       taskRef: {name: notify}
