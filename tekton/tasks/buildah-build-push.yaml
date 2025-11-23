@@ -52,7 +52,7 @@ spec:
         #!/bin/sh
         set -e
         echo "🔧 构建镜像: $(params.IMAGE)"
-        buildah bud -f $(workspaces.source.path)/$(params.DOCKERFILE) \
+        buildah bud --pull=missing -f $(workspaces.source.path)/$(params.DOCKERFILE) \
                     -t $(params.IMAGE) \
                     $(workspaces.source.path)
         buildah push $(params.IMAGE)

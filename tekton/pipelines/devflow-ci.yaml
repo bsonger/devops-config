@@ -11,9 +11,12 @@ spec:
     - {name: name,           type: string}
     - {name: image-tag,      type: string,  default: latest}
     - {name: DOCKERFILE,      type: string,  default: Dockerfile}
+    - name: manifest-name
+      type: string
   workspaces:
     - {name: source}
     - {name: dockerconfig}
+    - name: ssh
   tasks:
     - name: clone
       taskRef: {name: git-clone}
@@ -40,12 +43,16 @@ spec:
         name: build-push-manifest
       params:
         - name: name
-          value: ${params.name}
+          value: $(params.name)
         - name: manifest-name
-          value: ${params.manifest-name}
+          value: $(params.manifest-name)
+        - name: tag
+          value: $(params.image-tag)
       workspaces:
         - name: source
           workspace: source
+        - name: ssh
+          workspace: ssh
   finally:
     - name: notify
       taskRef: {name: notify}

@@ -4,3 +4,5 @@ configMapGenerator:
   - name: ${APP_NAME}
     files:
       - config-dev.yaml
+patchesStrategicMerge:
+  - deployment-patch.yaml
