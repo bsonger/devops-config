@@ -6,7 +6,8 @@ metadata:
 spec:
   mode: deployment
   replicas: 1
-  image:  otel/opentelemetry-collector-k8s:0.126.0
+  image: otel/opentelemetry-collector-k8s:0.126.0
+
   config:
     receivers:
       otlp:
@@ -15,11 +16,25 @@ spec:
             endpoint: 0.0.0.0:4317
           http:
             endpoint: 0.0.0.0:4318
+
     processors:
       memory_limiter:
         check_interval: 1s
         limit_percentage: 75
         spike_limit_percentage: 15
+
+      resource:
+        attributes:
+          - key: service.name
+            value: devflow-api
+            action: upsert
+          - key: service.namespace
+            value: observability
+            action: insert
+          - key: deployment.environment
+            value: prod
+            action: insert
+
       batch:
         timeout: 10s
         send_batch_size: 512
@@ -27,14 +42,13 @@ spec:
     exporters:
       debug: {}
       otlp:
-        endpoint: "tempo-distributor-discovery.monitoring.svc.cluster.local:4317"  # Tempo ClusterIP + OTLP gRPC
+        endpoint: tempo-distributor-discovery.monitoring.svc.cluster.local:4317
         tls:
-          insecure: true      # ★ 关闭 TLS
-
+          insecure: true
 
     service:
       pipelines:
         traces:
           receivers: [otlp]
-          processors: [memory_limiter, batch]
+          processors: [memory_limiter, resource, batch]
           exporters: [otlp]
