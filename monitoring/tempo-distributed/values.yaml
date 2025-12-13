@@ -1298,23 +1298,23 @@ memberlist:
   node_name: ""
   cluster_label: "{{ .Release.Name }}.{{ .Release.Namespace }}"
   randomize_node_name: true
-  stream_timeout: "10s"
+  stream_timeout: "20s"
   retransmit_factor: 2
-  pull_push_interval: "30s"
-  gossip_interval: "1s"
-  gossip_nodes: 2
+  pull_push_interval: "60s"
+  gossip_interval: "2s"
+  gossip_nodes: 3
   gossip_to_dead_nodes_time: "30s"
-  min_join_backoff: "1s"
-  max_join_backoff: "1m"
-  max_join_retries: 10
+  min_join_backoff: "2s"
+  max_join_backoff: "2m"
+  max_join_retries: 15
   abort_if_cluster_join_fails: false
-  rejoin_interval: "0s"
-  left_ingesters_timeout: "5m"
-  leave_timeout: "5s"
+  rejoin_interval: "30s"
+  left_ingesters_timeout: "10m"
+  leave_timeout: "10s"
   bind_addr: []
   bind_port: 7946
-  packet_dial_timeout: "5s"
-  packet_write_timeout: "5s"
+  packet_dial_timeout: "10s"
+  packet_write_timeout: "10s"
 
 # -- Config file contents for Tempo distributed. Passed through the `tpl` function to allow templating
 

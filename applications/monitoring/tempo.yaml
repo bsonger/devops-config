@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: git@github.com:bsonger/devops-config.git
     targetRevision: main
-    path: ./monitoring/tempo
+    path: ./monitoring/tempo-distributed
     helm:
       valueFiles:
         - values.yaml

@@ -1,8 +1,8 @@
 apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
-  name: trace-demo
-  namespace: open-telemetry
+  name: trace
+  namespace: observability
 spec:
   mode: deployment
   replicas: 1
@@ -27,7 +27,7 @@ spec:
     exporters:
       debug: {}
       otlp:
-        endpoint: "tempo.monitoring.svc.cluster.local:4317"  # Tempo ClusterIP + OTLP gRPC
+        endpoint: "tempo-distributor-discovery.monitoring.svc.cluster.local:4317"  # Tempo ClusterIP + OTLP gRPC
         tls:
           insecure: true      # ★ 关闭 TLS
 
