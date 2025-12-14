@@ -43,7 +43,6 @@ alloy:
         role = "pod"
       }
       loki.source.kubernetes "pods" {
-        namespaces = ["app"]
         targets    = discovery.kubernetes.pods.targets
         forward_to = [loki.write.default.receiver]
       }
