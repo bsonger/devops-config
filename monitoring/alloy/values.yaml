@@ -54,7 +54,7 @@ alloy:
       }
       loki.source.kubernetes "pods" {
         targets    = discovery.kubernetes.pods.targets
-        forward_to = [loki.write.local.receiver]
+        forward_to = [loki.write.default.receiver]
       }
 
     # -- Name of existing ConfigMap to use. Used when create is false.
