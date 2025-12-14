@@ -8,10 +8,10 @@ spec:
   source:
     repoURL: git@github.com:bsonger/devops-config.git
     targetRevision: main
-    path: ./monitoring/loki-distributed
+    path: ./monitoring/loki
     helm:
       valueFiles:
-        - values.yaml
+        - values-prod.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring

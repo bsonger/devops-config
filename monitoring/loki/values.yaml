@@ -424,33 +424,24 @@ loki:
   storage:
     # Loki requires a bucket for chunks and the ruler. GEL requires a third bucket for the admin API.
     # Please provide these values if you are using object storage.
-    bucketNames:
-      chunks: loki
-      ruler: loki
-      admin: loki
+    # bucketNames:
+    #   chunks: FIXME
+    #   ruler: FIXME
+    #   admin: FIXME
     type: s3
     s3:
-      s3: ""
-      endpoint: "https://minio.minio:443"
-      region: "us-east-1"
-      secretAccessKey: jLG8LAnawBZreKFRifPHHmBUjPmklZhDSk0Vl8BB
-      accessKeyId: 3ItWE9jHmhIqz2Bk2Ho4
-#      signatureVersion: s3v4
-      s3ForcePathStyle: true
-      insecure: true
-      http_config:
-        idle_conn_timeout: 90s
-        response_header_timeout: 0s
-        insecure_skip_verify: true  # 与 insecure 配合，跳过 TLS 验证
+      s3: null
+      endpoint: null
+      region: null
+      secretAccessKey: null
+      accessKeyId: null
+      signatureVersion: null
+      s3ForcePathStyle: false
+      insecure: false
+      http_config: {}
       # -- Check https://grafana.com/docs/loki/latest/configure/#s3_storage_config for more info on how to provide a backoff_config
-#      backoff_config:
-#        max_retries: 3
-#        min_backoff: 1s
-#        max_backoff: 5s
-#        retry_on:
-#          - 5xx
-#          - connection_error
-      disable_dualstack: true
+      backoff_config: {}
+      disable_dualstack: false
     gcs:
       chunkBufferSize: 0
       requestTimeout: "0s"
@@ -530,15 +521,7 @@ loki:
         account_key: null
 
   # -- Check https://grafana.com/docs/loki/latest/configuration/#schema_config for more info on how to configure schemas
-  schemaConfig:
-    configs:
-      - from: 2024-04-01
-        object_store: s3
-        store: tsdb
-        schema: v13
-        index:
-          prefix: index_
-          period: 24h
+  schemaConfig: {}
   # -- a real Loki install requires a proper schemaConfig defined above this, however for testing or playing around
   # you can enable useTestSchema
   useTestSchema: false
@@ -1555,7 +1538,7 @@ singleBinary:
     # If set to "-", storageClassName: "", which disables dynamic provisioning.
     # If empty or set to null, no storageClassName spec is
     # set, choosing the default provisioner (gp2 on AWS, standard on GKE, AWS, and OpenStack).
-    storageClass: local-path
+    storageClass: null
     # -- Selector for persistent disk
     selector: null
     # -- Annotations for volume claim
@@ -1573,7 +1556,7 @@ singleBinary:
 # Configuration for the write pod(s)
 write:
   # -- Number of replicas for the write
-  replicas: 1
+  replicas: 3
   autoscaling:
     # -- Enable autoscaling for the write.
     enabled: false
@@ -1659,15 +1642,15 @@ write:
   # -- Affinity for write pods.
   # @default -- Hard node anti-affinity
   # The value will be passed through tpl.
-#  affinity:
-#    podAntiAffinity:
-#      requiredDuringSchedulingIgnoredDuringExecution:
-#        - labelSelector:
-#            matchLabels:
-#              app.kubernetes.io/component: write
-#              app.kubernetes.io/name: '{{ include "loki.name" . }}'
-#              app.kubernetes.io/instance: '{{ .Release.Name }}'
-#          topologyKey: kubernetes.io/hostname
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              app.kubernetes.io/component: write
+              app.kubernetes.io/name: '{{ include "loki.name" . }}'
+              app.kubernetes.io/instance: '{{ .Release.Name }}'
+          topologyKey: kubernetes.io/hostname
   # -- DNS config for write pods
   dnsConfig: {}
   # -- Node selector for write pods
@@ -1697,7 +1680,7 @@ write:
     # If set to "-", storageClassName: "", which disables dynamic provisioning.
     # If empty or set to null, no storageClassName spec is
     # set, choosing the default provisioner (gp2 on AWS, standard on GKE, AWS, and OpenStack).
-    storageClass: local-path
+    storageClass: null
     # -- Selector for persistent disk
     selector: null
     # -- Annotations for volume claim
@@ -1707,7 +1690,7 @@ write:
 # --  Configuration for the read pod(s)
 read:
   # -- Number of replicas for the read
-  replicas: 1
+  replicas: 3
   autoscaling:
     # -- Enable autoscaling for the read, this is only used if `queryIndex.enabled: true`
     enabled: false
@@ -1790,15 +1773,15 @@ read:
   # -- Affinity for read pods.
   # @default -- Hard node anti-affinity
   # The value will be passed through tpl.
-#  affinity:
-#    podAntiAffinity:
-#      requiredDuringSchedulingIgnoredDuringExecution:
-#        - labelSelector:
-#            matchLabels:
-#              app.kubernetes.io/component: read
-#              app.kubernetes.io/name: '{{ include "loki.name" . }}'
-#              app.kubernetes.io/instance: '{{ .Release.Name }}'
-#          topologyKey: kubernetes.io/hostname
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              app.kubernetes.io/component: read
+              app.kubernetes.io/name: '{{ include "loki.name" . }}'
+              app.kubernetes.io/instance: '{{ .Release.Name }}'
+          topologyKey: kubernetes.io/hostname
   # -- DNS config for read pods
   dnsConfig: {}
   # -- Node selector for read pods
@@ -1824,7 +1807,7 @@ read:
     # If set to "-", storageClassName: "", which disables dynamic provisioning.
     # If empty or set to null, no storageClassName spec is
     # set, choosing the default provisioner (gp2 on AWS, standard on GKE, AWS, and OpenStack).
-    storageClass: local-path
+    storageClass: null
     # -- Selector for persistent disk
     selector: null
     # -- Annotations for volume claim
@@ -1834,7 +1817,7 @@ read:
 # --  Configuration for the backend pod(s)
 backend:
   # -- Number of replicas for the backend
-  replicas: 1
+  replicas: 3
   autoscaling:
     # -- Enable autoscaling for the backend.
     enabled: false
@@ -1911,15 +1894,15 @@ backend:
   # -- Affinity for backend pods.
   # @default -- Hard node anti-affinity
   # The value will be passed through tpl.
-#  affinity:
-#    podAntiAffinity:
-#      requiredDuringSchedulingIgnoredDuringExecution:
-#        - labelSelector:
-#            matchLabels:
-#              app.kubernetes.io/component: backend
-#              app.kubernetes.io/name: '{{ include "loki.name" . }}'
-#              app.kubernetes.io/instance: '{{ .Release.Name }}'
-#          topologyKey: kubernetes.io/hostname
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              app.kubernetes.io/component: backend
+              app.kubernetes.io/name: '{{ include "loki.name" . }}'
+              app.kubernetes.io/instance: '{{ .Release.Name }}'
+          topologyKey: kubernetes.io/hostname
   # -- DNS config for backend pods
   dnsConfig: {}
   # -- Node selector for backend pods
@@ -1949,7 +1932,7 @@ backend:
     # If set to "-", storageClassName: "", which disables dynamic provisioning.
     # If empty or set to null, no storageClassName spec is
     # set, choosing the default provisioner (gp2 on AWS, standard on GKE, AWS, and OpenStack).
-    storageClass: local-path
+    storageClass: null
     # -- Selector for persistent disk
     selector: null
     # -- Annotations for volume claim
@@ -2108,7 +2091,7 @@ ingester:
         #   If set to "-", storageClassName: "", which disables dynamic provisioning.
         #   If empty or set to null, no storageClassName spec is
         #   set, choosing the default provisioner (gp2 on AWS, standard on GKE, AWS, and OpenStack).
-        storageClass: local-path
+        storageClass: null
         # - name: wal
         #   size: 150Gi
     # -- Enable StatefulSetAutoDeletePVC feature
@@ -2666,7 +2649,7 @@ indexGateway:
     # If set to "-", storageClassName: "", which disables dynamic provisioning.
     # If empty or set to null, no storageClassName spec is
     # set, choosing the default provisioner (gp2 on AWS, standard on GKE, AWS, and OpenStack).
-    storageClass: local-path
+    storageClass: null
     # -- Annotations for index gateway PVCs
     annotations: {}
     # -- Labels for index gateway PVCs
@@ -2716,15 +2699,15 @@ compactor:
   # -- Affinity for compactor pods.
   # @default -- Hard node anti-affinity
   # The value will be passed through tpl.
-#  affinity:
-#    podAntiAffinity:
-#      requiredDuringSchedulingIgnoredDuringExecution:
-#        - labelSelector:
-#            matchLabels:
-#              app.kubernetes.io/component: compactor
-#              app.kubernetes.io/name: '{{ include "loki.name" . }}'
-#              app.kubernetes.io/instance: '{{ .Release.Name }}'
-#          topologyKey: kubernetes.io/hostname
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              app.kubernetes.io/component: compactor
+              app.kubernetes.io/name: '{{ include "loki.name" . }}'
+              app.kubernetes.io/instance: '{{ .Release.Name }}'
+          topologyKey: kubernetes.io/hostname
   # -- Labels for compactor service
   serviceLabels: {}
   # -- Annotations for compactor service
@@ -2776,7 +2759,7 @@ compactor:
         #   If set to "-", storageClassName: "", which disables dynamic provisioning.
         #   If empty or set to null, no storageClassName spec is
         #   set, choosing the default provisioner (gp2 on AWS, standard on GKE, AWS, and OpenStack).
-        storageClass: local-path
+        storageClass: null
         # -- Annotations for compactor PVCs
         annotations: {}
         # -- Labels for compactor PVCs
@@ -2895,7 +2878,7 @@ bloomGateway:
         #   If set to "-", storageClassName: "", which disables dynamic provisioning.
         #   If empty or set to null, no storageClassName spec is
         #   set, choosing the default provisioner (gp2 on AWS, standard on GKE, AWS, and OpenStack).
-        storageClass: local-path
+        storageClass: null
     # -- Enable StatefulSetAutoDeletePVC feature
     enableStatefulSetAutoDeletePVC: false
     whenDeleted: Retain
@@ -3307,15 +3290,15 @@ ruler:
   # -- Affinity for ruler pods.
   # @default -- Hard node anti-affinity
   # The value will be passed through tpl.
-#  affinity:
-#    podAntiAffinity:
-#      requiredDuringSchedulingIgnoredDuringExecution:
-#        - labelSelector:
-#            matchLabels:
-#              app.kubernetes.io/component: ruler
-#              app.kubernetes.io/name: '{{ include "loki.name" . }}'
-#              app.kubernetes.io/instance: '{{ .Release.Name }}'
-#          topologyKey: kubernetes.io/hostname
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              app.kubernetes.io/component: ruler
+              app.kubernetes.io/name: '{{ include "loki.name" . }}'
+              app.kubernetes.io/instance: '{{ .Release.Name }}'
+          topologyKey: kubernetes.io/hostname
   # -- Pod Disruption Budget maxUnavailable
   maxUnavailable: null
   # -- Node selector for ruler pods
@@ -3667,10 +3650,7 @@ resultsCache:
   extraVolumeMounts: []
   # -- Resource requests and limits for the results-cache
   # By default a safe memory limit will be requested based on allocatedMemory value (floor (* 1.2 allocatedMemory)).
-  resources:
-    requests:
-      cpu: 10m
-      memory: 100Mi
+  resources: null
   # -- Service annotations and labels
   service:
     annotations: {}
@@ -3686,7 +3666,7 @@ resultsCache:
     # If set to "-", storageClassName: "", which disables dynamic provisioning.
     # If empty or set to null, no storageClassName spec is
     # set, choosing the default provisioner (gp2 on AWS, standard on GKE, AWS, and OpenStack).
-    storageClass: local-path
+    storageClass: null
     # -- Volume mount path
     mountPath: /data
     # -- PVC additional labels
@@ -4330,4 +4310,4 @@ tableManager:
   # -- Enable deletes by retention
   retention_deletes_enabled: false
   # -- Set retention period
-  retention_period: 2d
+  retention_period: 0
