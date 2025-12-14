@@ -20,7 +20,7 @@ loki:
       endpoint: minio.minio.svc.cluster.local:443
       accessKeyId: 3ItWE9jHmhIqz2Bk2Ho4
       secretAccessKey: jLG8LAnawBZreKFRifPHHmBUjPmklZhDSk0Vl8BB
-      insecure: false
+      insecure: true
       s3forcepathstyle: true
 
    querier:
