@@ -25,14 +25,8 @@ spec:
 
       resource:
         attributes:
-          - key: service.name
-            value: devflow-api
-            action: upsert
           - key: service.namespace
             value: observability
-            action: insert
-          - key: deployment.environment
-            value: prod
             action: insert
 
       batch:
@@ -50,5 +44,5 @@ spec:
       pipelines:
         traces:
           receivers: [otlp]
-          processors: [memory_limiter, resource, batch]
+          processors: [memory_limiter, batch]
           exporters: [otlp]
