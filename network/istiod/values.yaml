@@ -392,11 +392,11 @@ _internal_defaults_do_not_set:
 
       # Specify which tracer to use. One of: zipkin, lightstep, datadog, stackdriver, none.
       # If using stackdriver tracer outside GCP, set env GOOGLE_APPLICATION_CREDENTIALS to the GCP credential file.
-      tracer: otlp
-      otlp:
-        endpoint: "trace-collector.monitoring.svc.cluster.local:4317"
-        insecure: true
+      tracer: zipkin
 
+    tracer:
+      zipkin:
+        address: "http://trace-collector.monitoring.svc:9411"
     proxy_init:
       # Base name for the proxy_init container, used to configure iptables.
       image: istio/proxyv2:1.27.3
