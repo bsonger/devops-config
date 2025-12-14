@@ -34,29 +34,29 @@ alloy:
     create: true
     # -- Content to assign to the new ConfigMap.  This is passed into `tpl` allowing for templating from values.
     content: |
-      loki.write "default" {
-        endpoint {
-          url = "http://loki-distributor.monitoring.svc.cluster.local:3100/loki/api/v1/push"
-        }
-        labels = {
-          app = "alloy",
-          env = "prod",
-        }
-      
-        batch_size = 1024
-        batch_wait = "1s"
-        tls {
-          insecure_skip_verify = true
-        }
-      }
-# 收集 Kubernetes Pod 日志
-      file.source "k8s_logs" {
-        targets = [
-          { __path__ = "/var/log/containers/*.log" },
-        ]
-      
-        forward_to = [loki.write.default.receiver]
-      }
+      outputs:
+        loki:
+          type: loki
+          endpoint:
+            url: "http://loki-query-frontend.monitoring.svc.cluster.local:3100/loki/api/v1/push"
+          labels:
+            app: "alloy"
+            env: "prod"
+          batch_size: 1024
+          batch_wait: "1s"
+          tls:
+            insecure_skip_verify: true
+      kubernetes:
+        source "pods" :
+          namespaces: ["*"]               # 收集所有 namespace 的 Pod 日志
+          forward_to: [outputs.loki]      # 转发到 Loki
+          include_pod_labels: true
+          include_container_name: true
+          include_namespace: true
+          container_regex: ".*"           # 匹配所有容器
+          multiline:
+            enabled: false
+          tail_lines: 100
 
     # -- Name of existing ConfigMap to use. Used when create is false.
     name: null
