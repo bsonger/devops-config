@@ -396,7 +396,7 @@ _internal_defaults_do_not_set:
 
     tracer:
       zipkin:
-        address: "http://trace-collector.monitoring.svc:9411"
+        address: "trace-collector.observability.svc.cluster.local:9411"
     proxy_init:
       # Base name for the proxy_init container, used to configure iptables.
       image: istio/proxyv2:1.27.3
