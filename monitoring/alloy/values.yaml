@@ -39,13 +39,13 @@ alloy:
           url = "http://loki-distributor.monitoring.svc.cluster.local:3100/loki/api/v1/push"
         }
       }
-      discovery.kubernetes "argo-cd" {
+      discovery.kubernetes "argocd" {
         namespaces = ["argo-cd"]
         role = "pod"
       }
       
-      loki.source.kubernetes "argo-cd" {
-        targets    = discovery.kubernetes.argo-cd.targets
+      loki.source.kubernetes "argocd" {
+        targets    = discovery.kubernetes.argocd.targets
         forward_to = [loki.write.default.receiver]
       }
       
