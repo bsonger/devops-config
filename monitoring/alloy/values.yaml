@@ -39,15 +39,27 @@ alloy:
           url = "http://loki-distributor.monitoring.svc.cluster.local:3100/loki/api/v1/push"
         }
       }
-      discovery.kubernetes "pods" {
+      discovery.kubernetes "argo-cd" {
+        namespaces = ["argo-cd"]
         role = "pod"
       }
-      loki.source.kubernetes "pods" {
-        targets    = discovery.kubernetes.pods.targets
+      
+      loki.source.kubernetes "argo-cd" {
+        targets    = discovery.kubernetes.argo-cd.targets
         forward_to = [loki.write.default.receiver]
       }
       
-      loki.source.kubernetes_events "event" {
+      discovery.kubernetes "app" {
+        namespaces = ["app"]
+        role = "pod"
+      }
+      
+      loki.source.kubernetes "app" {
+        targets    = discovery.kubernetes.app.targets
+        forward_to = [loki.write.default.receiver]
+      }
+      
+      loki.source.kubernetes_events "app-event" {
         namespaces = ["app"]
         forward_to = [loki.write.default.receiver]
       }
