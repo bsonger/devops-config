@@ -33,7 +33,18 @@ alloy:
     # -- Create a new ConfigMap for the config file.
     create: true
     # -- Content to assign to the new ConfigMap.  This is passed into `tpl` allowing for templating from values.
-    content: ''
+    content: |
+      outputs:
+        loki:
+          type: loki
+          endpoint: "http://loki-query-frontend.monitoring.svc.cluster.local:3100/loki/api/v1/push"
+          labels:
+            app: alloy
+            env: prod
+          batch_size: 1024
+          batch_wait: 1s
+          tls:
+            insecure_skip_verify: true
 
     # -- Name of existing ConfigMap to use. Used when create is false.
     name: null
