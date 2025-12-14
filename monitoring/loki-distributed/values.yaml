@@ -243,16 +243,7 @@ loki:
     tsdb_shipper:
       active_index_directory: /var/loki/tsdb-index
       cache_location: /var/loki/tsdb-cache
-#    boltdb_shipper:
-#      shared_store: filesystem
-#      active_index_directory: /var/loki/index
-#      cache_location: /var/loki/cache
-#      cache_ttl: 24h
-#    filesystem:
-#      directory: /var/loki/chunks
-# -- Uncomment to configure each storage individually
-#   azure: {}
-#   gcs: {}
+    use_thanos_objstore: true
     object_store:
       s3:
         tls_insecure_skip_verify: true
