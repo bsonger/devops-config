@@ -10,16 +10,19 @@ loki:
            period: 24h
    ingester:
      chunk_encoding: snappy
-   storage_config:
-     use_thanos_objstore: true
-     object_store:
-        s3:
-          tls_insecure_skip_verify: true
-          bucket: loki                        # store traces in this bucket
-          endpoint: "minio.minio.svc.cluster.local:443"  # api endpoint
-          access_key: 3ItWE9jHmhIqz2Bk2Ho4                                 # optional. access key when using static credentials.
-          secret_key: jLG8LAnawBZreKFRifPHHmBUjPmklZhDSk0Vl8BB                                 # optional. secret key when using static credentials.
-          insecure: false
+   storage:
+    type: s3
+    bucketNames:
+      chunks: loki
+      ruler: loki
+      admin: loki
+    s3:
+      endpoint: minio.minio.svc.cluster.local:443
+      accessKeyId: 3ItWE9jHmhIqz2Bk2Ho4
+      secretAccessKey: jLG8LAnawBZreKFRifPHHmBUjPmklZhDSk0Vl8BB
+      insecure: false
+      s3forcepathstyle: true
+
    querier:
      # Default is 4, if you have enough memory and CPU you can increase, reduce if OOMing
      max_concurrent: 4
@@ -78,4 +81,4 @@ gateway:
 
 # Enable minio for storage
 minio:
-  enabled: true
+  enabled: false
