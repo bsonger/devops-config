@@ -39,8 +39,8 @@ alloy:
           url = "http://loki-distributor.monitoring.svc.cluster.local:3100/loki/api/v1/push"
         }
         labels = {
-          app = "alloy"
-          env = "prod"
+          app = "alloy",
+          env = "prod",
         }
       
         batch_size = 1024
@@ -53,16 +53,8 @@ alloy:
         namespaces = ["*"]
         containers = ["*"]
         labels = {
-          app = "alloy"
+          app = "alloy",
         }
-        forward_to = [loki.write.default.receiver]
-      }
-      
-      file.source "node-logs" {
-        targets = [
-          { __path__ = "/var/log/*.log", "node" = "host" },
-        ]
-      
         forward_to = [loki.write.default.receiver]
       }
     # -- Name of existing ConfigMap to use. Used when create is false.
