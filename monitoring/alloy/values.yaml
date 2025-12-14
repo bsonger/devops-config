@@ -49,13 +49,12 @@ alloy:
           insecure_skip_verify = true
         }
       }
-      
-      file.source "k8s_logs" {
-        targets = [
-          { __path__ = "/var/log/containers/*.log" },
-        ]
-      
-        forward_to = [loki.write.default.receiver]
+      discovery.kubernetes "pods" {
+        role = "pod"
+      }
+      loki.source.kubernetes "pods" {
+        targets    = discovery.kubernetes.pods.targets
+        forward_to = [loki.write.local.receiver]
       }
 
     # -- Name of existing ConfigMap to use. Used when create is false.
