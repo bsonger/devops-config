@@ -49,7 +49,7 @@ alloy:
           insecure_skip_verify = true
         }
       }
-# 收集 Kubernetes Pod 日志
+      
       file.source "k8s_logs" {
         targets = [
           { __path__ = "/var/log/containers/*.log" },
