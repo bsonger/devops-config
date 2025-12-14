@@ -580,7 +580,7 @@ loki:
     enabled: false
     gateway:
       # enable gateway proxying to UI under /ui
-      enabled: true
+      enabled: false
   # --  Optional querier configuration
   query_range: {}
   # --  Optional querier configuration
