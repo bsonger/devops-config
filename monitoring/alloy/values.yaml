@@ -59,7 +59,7 @@ alloy:
         forward_to = [loki.write.default.receiver]
       }
       
-      loki.source.kubernetes_events "app-event" {
+      loki.source.kubernetes_events "appEvent" {
         namespaces = ["app"]
         forward_to = [loki.write.default.receiver]
       }
