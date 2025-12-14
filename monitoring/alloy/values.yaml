@@ -45,8 +45,6 @@ alloy:
       
         batch_size = 1024
         batch_wait = "1s"
-      
-        # TLS 配置
         tls {
           insecure_skip_verify = true
         }
