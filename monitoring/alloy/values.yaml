@@ -49,14 +49,15 @@ alloy:
           insecure_skip_verify = true
         }
       }
-      kubernetes.source "pods" {
-        namespaces = ["*"]
-        containers = ["*"]
-        labels = {
-          app = "alloy",
-        }
+# 收集 Kubernetes Pod 日志
+      file.source "k8s_logs" {
+        targets = [
+          { __path__ = "/var/log/containers/*.log" },
+        ]
+      
         forward_to = [loki.write.default.receiver]
       }
+
     # -- Name of existing ConfigMap to use. Used when create is false.
     name: null
     # -- Key in ConfigMap to get config from.
