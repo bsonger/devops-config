@@ -34,12 +34,61 @@ alloy:
     create: true
     # -- Content to assign to the new ConfigMap.  This is passed into `tpl` allowing for templating from values.
     content: |
-      outputs.loki.type = "loki"
-      outputs.loki.endpoint = "http://loki-query-frontend.monitoring.svc.cluster.local:3100/loki/api/v1/push"
-      outputs.loki.labels = { app = "alloy", env = "prod" }
-      outputs.loki.batch_size = 1024
-      outputs.loki.batch_wait = "1s"
-      outputs.loki.tls_insecure_skip_verify = true
+      # Alloy 配置文件示例：/etc/alloy/config.alloy
+      
+      # 输出 Loki
+      loki.write "default" {
+        # 发送到集群内部 loki-distributor
+        endpoint {
+          url = "http://loki-distributor.monitoring.svc.cluster.local:3100/loki/api/v1/push"
+        }
+      
+        # 如果你想使用 loki-gateway 暴露给外部，可以启用下面的 endpoint
+        # endpoint {
+        #   url = "http://loki-gateway.monitoring.svc.cluster.local:80/loki/api/v1/push"
+        # }
+      
+        # 添加标签，方便查询
+        labels = {
+          app = "alloy"
+          env = "prod"
+        }
+      
+        # 批量发送配置
+        batch_size = 1024
+        batch_wait = "1s"
+      
+        # TLS 配置
+        tls {
+          insecure_skip_verify = true
+        }
+      }
+      
+      # 日志来源：收集整个 Kubernetes 集群的 Pod 日志
+      kubernetes.source "pods" {
+        # 所有 namespace
+        namespaces = ["*"]
+      
+        # 收集所有容器日志
+        containers = ["*"]
+      
+        # 可以加标签
+        labels = {
+          app = "alloy"
+        }
+      
+        # 将采集到的日志转发给上面定义的 Loki
+        forward_to = [loki.write.default.receiver]
+      }
+      
+      # 选填：可收集 node 日志或其他文件
+      file.source "node-logs" {
+        targets = [
+          { __path__ = "/var/log/*.log", "node" = "host" },
+        ]
+      
+        forward_to = [loki.write.default.receiver]
+      }
     # -- Name of existing ConfigMap to use. Used when create is false.
     name: null
     # -- Key in ConfigMap to get config from.
