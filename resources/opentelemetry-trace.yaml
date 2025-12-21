@@ -8,6 +8,18 @@ spec:
   replicas: 1
   image: otel/opentelemetry-collector-k8s:0.126.0
 
+  # 暴露端口
+  ports:
+    - name: otlp-grpc
+      port: 4317
+      targetPort: 4317
+    - name: otlp-http
+      port: 4318
+      targetPort: 4318
+    - name: zipkin
+      port: 9411
+      targetPort: 9411
+
   config:
     receivers:
       otlp:
@@ -16,18 +28,19 @@ spec:
             endpoint: 0.0.0.0:4317
           http:
             endpoint: 0.0.0.0:4318
+      zipkin:
+        endpoint: "0.0.0.0:9411"
+
     processors:
       memory_limiter:
         check_interval: 1s
         limit_percentage: 75
         spike_limit_percentage: 15
-
       resource:
         attributes:
           - key: service.namespace
             value: observability
             action: insert
-
       batch:
         timeout: 10s
         send_batch_size: 512
@@ -42,6 +55,6 @@ spec:
     service:
       pipelines:
         traces:
-          receivers: [otlp]
+          receivers: [otlp, zipkin]
           processors: [memory_limiter, batch]
           exporters: [otlp]

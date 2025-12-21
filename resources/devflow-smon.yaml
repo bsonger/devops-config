@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: devflow
+  namespace: app         # ServiceMonitor 本身所在命名空间
+  labels:
+    release: prometheus  # Prometheus Operator 对应的 release label
+spec:
+  selector:
+    matchLabels:
+      app: devflow       # 选中 devflow 这个 Service
+  namespaceSelector:
+    matchNames:
+      - app             # Service 所在命名空间
+  endpoints:
+    - port: "8080"      # Service 的端口名称或数字
+      interval: 30s    # 抓取间隔
+      path: /metrics    # metrics 暴露路径
