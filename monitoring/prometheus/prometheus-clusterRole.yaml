@@ -13,10 +13,10 @@ rules:
   - ""
   resources:
   - nodes/metrics
-  verbs:
-  - get
   - services
   - endpoints
+  verbs:
+  - get
 - nonResourceURLs:
   - /metrics
   - /metrics/slis
