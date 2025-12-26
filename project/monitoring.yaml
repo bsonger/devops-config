@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: monitoring
+  namespace: argo-cd
+spec:
+  description: "监控相关应用，如 Prometheus / Grafana / Loki"
+
+  # 允许同步的 Git 仓库
+  sourceRepos:
+    - "*"
+#    - "git@github.com:bsonger/devops-config.git"
+
+  # 允许部署的集群和命名空间
+  destinations:
+    - namespace: monitoring
+      server: https://kubernetes.default.svc
+    - namespace: observability
+      server: https://kubernetes.default.svc
+    - namespace: kube-system
+      server: https://kubernetes.default.svc
+    - namespace: oauth2-proxy
+      server: https://kubernetes.default.svc
+    - namespace: default
+      server: https://kubernetes.default.svc
+  # 允许操作所有集群级资源
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"
+
+  # 不限制命名空间资源
+  namespaceResourceBlacklist: []
+
+  # Roles（可选，如果不创建则默认权限由 Argo CD RBAC 决定）
+  roles: []

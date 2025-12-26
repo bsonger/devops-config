@@ -1,20 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: open-telemetry
+  name: argo-rollout
   namespace: argo-cd
 spec:
-  project: default
+  project: infra
   source:
     repoURL: git@github.com:bsonger/devops-config.git
     targetRevision: main
-    path: ./monitoring/opentelemetry-collector
+    path: ./tools/argo-rollout
     helm:
       valueFiles:
         - values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: open-telemetry
+    namespace: argo-rollout
   syncPolicy:
     automated:
       prune: true          # 自动删除未在 Git 中定义的资源
