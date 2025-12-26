@@ -13,6 +13,6 @@ spec:
     matchNames:
       - app             # Service 所在命名空间
   endpoints:
-    - port: "8080"      # Service 的端口名称或数字
+    - port: http  # Service 的端口名称或数字
       interval: 30s    # 抓取间隔
       path: /metrics    # metrics 暴露路径

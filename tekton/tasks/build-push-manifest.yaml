@@ -71,17 +71,17 @@ spec:
         mkdir -p "${DIR_PATH}/overlays/prod"
 
         echo "=== Render base templates ==="
-        for f in /template/base/*.tpl; do
+        for f in manifests/template/base/*.tpl; do
           envsubst < "$f" > "${DIR_PATH}/base/$(basename $f .tpl)"
         done
-
+        
         echo "=== Render dev overlays ==="
-        for f in /template/overlays/dev/*.tpl; do
+        for f in manifests/template/overlays/dev/*.tpl; do
           envsubst < "$f" > "${DIR_PATH}/overlays/dev/$(basename $f .tpl)"
         done
 
         echo "=== Render prod overlays ==="
-        for f in /template/overlays/prod/*.tpl; do
+        for f in manifests/template/overlays/prod/*.tpl; do
           envsubst < "$f" > "${DIR_PATH}/overlays/prod/$(basename $f .tpl)"
         done
 
