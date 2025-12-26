@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argo-rollout
+  name: argo-rollouts
   namespace: argo-cd
 spec:
-  project: infra
+  project: default
   source:
     repoURL: git@github.com:bsonger/devops-config.git
     targetRevision: main
-    path: ./tools/argo-rollout
+    path: ./tools/argo-rollouts
     helm:
       valueFiles:
         - values.yaml

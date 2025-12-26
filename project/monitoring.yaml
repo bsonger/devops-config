@@ -8,8 +8,7 @@ spec:
 
   # 允许同步的 Git 仓库
   sourceRepos:
-    - "*"
-#    - "git@github.com:bsonger/devops-config.git"
+    - "git@github.com:bsonger/devops-config.git"
 
   # 允许部署的集群和命名空间
   destinations:
