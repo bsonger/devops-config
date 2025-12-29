@@ -11,18 +11,18 @@ spec:
     targetRevision: main
     path: demo-application # ⚠️ 必须有，但你的 plugin 决定怎么用
     plugin:
-      name: devflow-plugin
+      name: plugin
       parameters:
         - name: type
           string: normal
         - name: replica
-          int: 2
+          string: "2"
         - name: internet
           string: external
         - name: env
           string: prod
         - name: repoUrl
-          string: https://github.com/your-org/your-repo.git
+          string: https://github.com/bsonger/devops-config.git
 
   destination:
     server: https://kubernetes.default.svc

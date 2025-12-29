@@ -421,7 +421,7 @@ configs:
     # -- Plugin yaml files to be added to argocd-cmp-cm
     plugins:
       # --- First plugin
-       plugin:
+       devflow-plugin:
           init:
             command: [sh]
             args: [-c, 'echo "Initializing DevFlow plugin..."']
@@ -2536,7 +2536,7 @@ repoServer:
      - name: devflow-plugin
        command:
          - "/var/run/argocd/argocd-cmp-server"
-       image: registry.cn-hangzhou.aliyuncs.com/devflow/devflow-plugin:devflow-plugin202512281740219
+       image: registry.cn-hangzhou.aliyuncs.com/devflow/devflow-plugin:devflow-plugin2025122921112894
        securityContext:
          runAsNonRoot: true
          runAsUser: 999
