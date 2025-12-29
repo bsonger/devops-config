@@ -413,28 +413,65 @@ configs:
   # Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/config-management-plugins/
   cmp:
     # -- Create the argocd-cmp-cm configmap
-    create: false
+    create: true
 
     # -- Annotations to be added to argocd-cmp-cm configmap
     annotations: {}
 
     # -- Plugin yaml files to be added to argocd-cmp-cm
-    plugins: {}
+    plugins:
       # --- First plugin
-      # my-plugin:
-      #   init:
-      #     command: [sh]
-      #     args: [-c, 'echo "Initializing..."']
-      #   generate:
-      #     command: [sh, -c]
-      #     args:
-      #       - |
-      #         echo "{\"kind\": \"ConfigMap\", \"apiVersion\": \"v1\", \"metadata\": { \"name\": \"$ARGOCD_APP_NAME\", \"namespace\": \"$ARGOCD_APP_NAMESPACE\", \"annotations\": {\"Foo\": \"$ARGOCD_ENV_FOO\", \"KubeVersion\": \"$KUBE_VERSION\", \"KubeApiVersion\": \"$KUBE_API_VERSIONS\",\"Bar\": \"baz\"}}}"
-      #   discover:
-      #     fileName: "./subdir/s*.yaml"
-      #     find:
-      #       glob: "**/Chart.yaml"
-      #       command: [sh, -c, find . -name env.yaml]
+       plugin:
+          init:
+            command: [sh]
+            args: [-c, 'echo "Initializing DevFlow plugin..."']
+          # -----------------------------
+          # 生成 Kubernetes 资源的命令
+          # -----------------------------
+          generate:
+            command: ["/home/argocd/cmp-server/plugins/devflow-plugin"]
+            args: []  # 不依赖 release.yaml 文件
+
+          # -----------------------------
+          # Discover 配置（可选）
+          # -----------------------------
+          discover: {}  # 不使用 discover，所有 Application 需显式指定插件
+
+          # -----------------------------
+          # 插件参数定义，供 UI 显示
+          # -----------------------------
+          parameters:
+            static:
+              - name: repoUrl
+                title: "Git 仓库地址"
+                tooltip: "插件从哪个 Git 仓库拉取 release.yaml 和 config"
+                string: ""
+                required: true
+              - name: env
+                title: "环境"
+                tooltip: "部署环境，例如 prod/test"
+                string: "prod"
+                required: true
+              - name: type
+                title: "发布类型"
+                tooltip: "发布类型：normal/canary/bluegreen"
+                string: normal
+                required: true
+              - name: replica
+                title: "副本数"
+                tooltip: "Deployment 或 Rollout 副本数量"
+                string: "1"
+                required: true
+              - name: internet
+                title: "网络类型"
+                tooltip: "internal/external"
+                string: internal
+                required: false
+            dynamic:
+              command: [echo, '[{"name":"example-param","string":"default-value"}]']
+
+          preserveFileMode: true
+          provideGitCreds: true
 
       # --- Second plugin
       # my-plugin2:
@@ -2472,7 +2509,8 @@ repoServer:
 
   # -- Secrets with credentials to pull images from a private registry
   # @default -- `[]` (defaults to global.imagePullSecrets)
-  imagePullSecrets: []
+  imagePullSecrets:
+    - name: aliyun-docker-config
 
   # -- Additional command line arguments to pass to repo server
   extraArgs: []
@@ -2494,27 +2532,27 @@ repoServer:
   # -- Additional containers to be added to the repo server pod
   ## Ref: https://argo-cd.readthedocs.io/en/stable/user-guide/config-management-plugins/
   ## Note: Supports use of custom Helm templates
-  extraContainers: []
-    # - name: cmp-my-plugin
-    #   command:
-    #     - "/var/run/argocd/argocd-cmp-server"
-    #   image: busybox
-    #   securityContext:
-    #     runAsNonRoot: true
-    #     runAsUser: 999
-    #   volumeMounts:
-    #     - mountPath: /var/run/argocd
-    #       name: var-files
-    #     - mountPath: /home/argocd/cmp-server/plugins
-    #       name: plugins
-    #     # Remove this volumeMount if you've chosen to bake the config file into the sidecar image.
-    #     - mountPath: /home/argocd/cmp-server/config/plugin.yaml
-    #       subPath: my-plugin.yaml
-    #       name: argocd-cmp-cm
-    #     # Starting with v2.4, do NOT mount the same tmp volume as the repo-server container. The filesystem separation helps
-    #     # mitigate path traversal attacks.
-    #     - mountPath: /tmp
-    #       name: cmp-tmp
+  extraContainers:
+     - name: devflow-plugin
+       command:
+         - "/var/run/argocd/argocd-cmp-server"
+       image: registry.cn-hangzhou.aliyuncs.com/devflow/devflow-plugin:devflow-plugin202512281740219
+       securityContext:
+         runAsNonRoot: true
+         runAsUser: 999
+       volumeMounts:
+         - mountPath: /var/run/argocd
+           name: var-files
+#         - mountPath: /home/argocd/cmp-server/plugins
+#           name: plugins
+         # Remove this volumeMount if you've chosen to bake the config file into the sidecar image.
+         - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+           subPath: plugin.yaml
+           name: argocd-cmp-cm
+         # Starting with v2.4, do NOT mount the same tmp volume as the repo-server container. The filesystem separation helps
+         # mitigate path traversal attacks.
+#         - mountPath: /tmp
+#           name: cmp-tmp
     # - name: cmp-my-plugin2
     #   command:
     #     - "/var/run/argocd/argocd-cmp-server"
@@ -2543,10 +2581,10 @@ repoServer:
   volumeMounts: []
 
   # -- Additional volumes to the repo server pod
-  volumes: []
-  #  - name: argocd-cmp-cm
-  #    configMap:
-  #      name: argocd-cmp-cm
+  volumes:
+    - name: argocd-cmp-cm
+      configMap:
+        name: argocd-cmp-cm
   #  - name: cmp-tmp
   #    emptyDir: {}
 
