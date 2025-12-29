@@ -4,14 +4,13 @@ app:
 image:
   repository: registry.cn-hangzhou.aliyuncs.com/devflow/devflow
   tag: devflow2025122619073411
-config:
+configs:
   - name: config-volume
     mountPath: /etc/devflow/config
     filesPath:
       prod: config/prod
       test: config/test
 service:
-  enabled: true
   ports:
     - name: http
       port: 8080
