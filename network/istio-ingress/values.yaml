@@ -55,6 +55,7 @@ _internal_defaults_do_not_set:
       port: 443
       protocol: TCP
       targetPort: 443
+      nodePort: 40000
     annotations: {}
     loadBalancerIP: ""
     loadBalancerSourceRanges: []

@@ -421,7 +421,7 @@ configs:
     # -- Plugin yaml files to be added to argocd-cmp-cm
     plugins:
       # --- First plugin
-       devflow-plugin:
+       plugin:
           init:
             command: [sh]
             args: [-c, 'echo "Initializing DevFlow plugin..."']
@@ -429,7 +429,7 @@ configs:
           # 生成 Kubernetes 资源的命令
           # -----------------------------
           generate:
-            command: ["/home/argocd/cmp-server/plugins/devflow-plugin"]
+            command: ["/home/argocd/devflow-plugin"]
             args: []  # 不依赖 release.yaml 文件
 
           # -----------------------------
@@ -442,31 +442,26 @@ configs:
           # -----------------------------
           parameters:
             static:
-              - name: repoUrl
-                title: "Git 仓库地址"
-                tooltip: "插件从哪个 Git 仓库拉取 release.yaml 和 config"
-                string: ""
+              - name: manifest-id
+                title: "manifest-id"
+                tooltip: "devflow的id"
+                string: "695662a486f12d0b5986d818"
                 required: true
               - name: env
-                title: "环境"
+                title: "env"
                 tooltip: "部署环境，例如 prod/test"
                 string: "prod"
                 required: true
-              - name: type
-                title: "发布类型"
-                tooltip: "发布类型：normal/canary/bluegreen"
-                string: normal
+              - name: devflow-address
+                title: "devflow-api"
+                tooltip: "devflow的地址"
+                string: "https://devflow.bei.com:30000"
                 required: true
-              - name: replica
-                title: "副本数"
-                tooltip: "Deployment 或 Rollout 副本数量"
-                string: "1"
+              - name: consul-address
+                title: "consul-address"
+                tooltip: "consul 地址"
+                string: "https://consul.bei.com:30000"
                 required: true
-              - name: internet
-                title: "网络类型"
-                tooltip: "internal/external"
-                string: internal
-                required: false
             dynamic:
               command: [echo, '[{"name":"example-param","string":"default-value"}]']
 
@@ -2536,16 +2531,16 @@ repoServer:
      - name: devflow-plugin
        command:
          - "/var/run/argocd/argocd-cmp-server"
-       image: registry.cn-hangzhou.aliyuncs.com/devflow/devflow-plugin:devflow-plugin2025122921112894
+       image: registry.cn-hangzhou.aliyuncs.com/devflow/devflow-plugin:devflow-plugin2026010220052255
        securityContext:
          runAsNonRoot: true
          runAsUser: 999
        volumeMounts:
          - mountPath: /var/run/argocd
            name: var-files
-#         - mountPath: /home/argocd/cmp-server/plugins
-#           name: plugins
-         # Remove this volumeMount if you've chosen to bake the config file into the sidecar image.
+         - mountPath: /home/argocd/cmp-server/plugins
+           name: plugins
+#          Remove this volumeMount if you've chosen to bake the config file into the sidecar image.
          - mountPath: /home/argocd/cmp-server/config/plugin.yaml
            subPath: plugin.yaml
            name: argocd-cmp-cm

@@ -1,32 +1,28 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: devflow-demo
+  name: devflow-demo-6
   namespace: argo-cd
 spec:
   project: default
-
   source:
-    repoURL: git@github.com:bsonger/devops-config.git
-    targetRevision: main
-    path: demo-application # ⚠️ 必须有，但你的 plugin 决定怎么用
+    repoURL: https://github.com/bsonger/devflow-common.git
+    path: "."   # 必须有
     plugin:
       name: plugin
       parameters:
-        - name: type
-          string: normal
-        - name: replica
-          string: "2"
-        - name: internet
-          string: external
+        - name: manifest-id
+          string: 695662a486f12d0b5986d818
         - name: env
           string: prod
-        - name: repoUrl
-          string: https://github.com/bsonger/devops-config.git
+        - name: devflow-address
+          string: http://devflow.app.svc.cluster.local:8080
+        - name: consul-address
+          string: http://consul-consul-server.consul.svc.cluster.local:8500
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: argo-cd
 
   syncPolicy:
     automated:

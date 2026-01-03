@@ -1,0 +1,41 @@
+project: app
+source:
+  repoURL: https://github.com/bsonger/manifests.git
+  path: devflow-console/devflow-console2025122618584010/overlays/prod
+  targetRevision: main
+destination:
+  server: https://kubernetes.default.svc
+  namespace: app
+syncPolicy:
+  automated:
+    prune: true
+    selfHeal: true
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: devflow-demo-6
+  namespace: argo-cd
+spec:
+project: app
+source:
+  repoURL: https://github.com/bsonger/manifests.git
+  path: devflow-console/devflow-console2025122618584010/overlays/prod
+  plugin:
+    name: plugin
+    parameters:
+      - name: manifest-id
+        string: 6958271886f12d0b5986d822
+      - name: env
+        string: prod
+      - name: devflow-address
+        string: http://devflow.app.svc.cluster.local:8080
+      - name: consul-address
+        string: http://consul-consul-server.consul.svc.cluster.local:8500
+destination:
+  server: https://kubernetes.default.svc
+  namespace: app
+syncPolicy:
+  automated:
+    prune: true
+    selfHeal: true
