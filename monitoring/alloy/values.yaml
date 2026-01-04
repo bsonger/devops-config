@@ -42,7 +42,7 @@ alloy:
       }
       discovery.kubernetes "argocd" {
         namespaces {
-          names = ["argo-cd"]
+          names = ["argocd"]
         }
         role = "pod"
       }
@@ -54,7 +54,7 @@ alloy:
       
       discovery.kubernetes "app" {
         namespaces {
-          names = ["app"]
+          names = ["applications"]
         }
         role = "pod"
       }

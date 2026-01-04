@@ -1,8 +1,5 @@
 [
   {
-    "id": "69220b4fdd76a93172dfe100",
-    "created_at": "2025-11-22T19:13:19.291Z",
-    "updated_at": "2025-11-22T19:13:19.291Z",
     "name": "devflow",
     "project_name": "applications",
     "repo_url": "https://github.com/bsonger/devflow.git",
@@ -29,9 +26,6 @@
     "status": ""
   },
   {
-    "id": "6922d1c761f96b84f54e5bf2",
-    "created_at": "2025-11-23T09:20:07.238Z",
-    "updated_at": "2025-11-23T09:20:07.238Z",
     "name": "document",
     "project_name": "applications",
     "repo_url": "https://github.com/bsonger/Document.git",
@@ -51,11 +45,8 @@
     "status": ""
   },
   {
-    "id": "6946b4e7088fd3af89148d0d",
-    "created_at": "0001-01-01T00:00:00Z",
-    "updated_at": "0001-01-01T00:00:00Z",
     "name": "devflow-controller",
-    "project_name": "app",
+    "project_name": "common",
     "repo_url": "https://github.com/bsonger/devflow-controller.git",
     "active_manifest_name": "",
     "replica": 1,
@@ -76,22 +67,12 @@
     "status": ""
   },
   {
-    "id": "694c2b4d48284ec6650b8dd9",
-    "created_at": "2025-12-24T18:05:01.406Z",
-    "updated_at": "2025-12-24T18:05:01.406Z",
     "name": "devflow-console",
     "project_name": "applications",
     "repo_url": "https://github.com/bsonger/devflow-console.git",
     "active_manifest_name": "",
     "replica": 3,
     "type": "blue-green",
-    "config_maps": [
-      {
-        "name": "config-volume",
-        "mount_path": "/etc/devflow-controller/config",
-        "files_path": null
-      }
-    ],
     "service": {
       "Ports": [
         {
@@ -105,9 +86,6 @@
     "status": ""
   },
   {
-    "id": "695155d2e89ac3e097a7e8a2",
-    "created_at": "2025-12-28T16:07:46.631Z",
-    "updated_at": "2025-12-28T16:07:46.631Z",
     "name": "devflow-plugin",
     "project_name": "applications",
     "repo_url": "https://github.com/bsonger/devflow-plugin.git",
