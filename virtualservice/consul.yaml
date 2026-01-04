@@ -1,0 +1,20 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: consul
+  namespace: istio-system
+spec:
+  hosts:
+  - "consul.bei.com"
+  gateways:
+  - devflow-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: consul-consul-ui.consul.svc.cluster.local
+        port:
+          number: 80
