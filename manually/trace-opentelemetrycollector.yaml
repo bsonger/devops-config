@@ -1,0 +1,114 @@
+apiVersion: v1
+items:
+- apiVersion: opentelemetry.io/v1beta1
+  kind: OpenTelemetryCollector
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"opentelemetry.io/v1beta1","kind":"OpenTelemetryCollector","metadata":{"annotations":{},"name":"trace","namespace":"observability"},"spec":{"config":{"exporters":{"debug":{},"otlp":{"endpoint":"tempo-distributor-discovery.monitoring.svc.cluster.local:4317","tls":{"insecure":true}}},"processors":{"batch":{"send_batch_size":512,"timeout":"10s"},"memory_limiter":{"check_interval":"1s","limit_percentage":75,"spike_limit_percentage":15},"resource":{"attributes":[{"action":"insert","key":"service.namespace","value":"observability"}]}},"receivers":{"otlp":{"protocols":{"grpc":{"endpoint":"0.0.0.0:4317"},"http":{"endpoint":"0.0.0.0:4318"}}},"zipkin":{"endpoint":"0.0.0.0:9411"}},"service":{"pipelines":{"traces":{"exporters":["otlp"],"processors":["memory_limiter","batch"],"receivers":["otlp","zipkin"]}}}},"image":"otel/opentelemetry-collector-k8s:0.126.0","mode":"deployment","ports":[{"name":"otlp-grpc","port":4317,"targetPort":4317},{"name":"otlp-http","port":4318,"targetPort":4318},{"name":"zipkin","port":9411,"targetPort":9411}],"replicas":1}}
+    creationTimestamp: "2025-12-13T18:46:11Z"
+    finalizers:
+    - opentelemetrycollector.opentelemetry.io/finalizer
+    generation: 9
+    name: trace
+    namespace: observability
+    resourceVersion: "30744854"
+    uid: 46327aa0-514c-49c1-b2b6-87f40a5f7107
+  spec:
+    config:
+      exporters:
+        debug: {}
+        otlp:
+          endpoint: tempo-distributor-discovery.monitoring.svc.cluster.local:4317
+          tls:
+            insecure: true
+      processors:
+        batch:
+          send_batch_size: 512
+          timeout: 10s
+        memory_limiter:
+          check_interval: 1s
+          limit_percentage: 75
+          spike_limit_percentage: 15
+        resource:
+          attributes:
+          - action: insert
+            key: service.namespace
+            value: observability
+      receivers:
+        otlp:
+          protocols:
+            grpc:
+              endpoint: 0.0.0.0:4317
+            http:
+              endpoint: 0.0.0.0:4318
+        zipkin:
+          endpoint: 0.0.0.0:9411
+      service:
+        pipelines:
+          traces:
+            exporters:
+            - otlp
+            processors:
+            - memory_limiter
+            - batch
+            receivers:
+            - otlp
+            - zipkin
+        telemetry:
+          metrics:
+            readers:
+            - pull:
+                exporter:
+                  prometheus:
+                    host: 0.0.0.0
+                    port: 8888
+    configVersions: 3
+    daemonSetUpdateStrategy: {}
+    deploymentUpdateStrategy: {}
+    image: otel/opentelemetry-collector-k8s:0.126.0
+    ingress:
+      route: {}
+    ipFamilyPolicy: SingleStack
+    managementState: managed
+    mode: deployment
+    networkPolicy: {}
+    observability:
+      metrics: {}
+    podDnsConfig: {}
+    ports:
+    - name: otlp-grpc
+      port: 4317
+      protocol: TCP
+      targetPort: 4317
+    - name: otlp-http
+      port: 4318
+      protocol: TCP
+      targetPort: 4318
+    - name: zipkin
+      port: 9411
+      protocol: TCP
+      targetPort: 9411
+    replicas: 1
+    resources: {}
+    targetAllocator:
+      allocationStrategy: consistent-hashing
+      collectorNotReadyGracePeriod: 30s
+      collectorTargetReloadInterval: 30s
+      filterStrategy: relabel-config
+      observability:
+        metrics: {}
+      prometheusCR:
+        scrapeInterval: 30s
+      resources: {}
+    upgradeStrategy: automatic
+  status:
+    image: otel/opentelemetry-collector-k8s:0.126.0
+    scale:
+      replicas: 1
+      selector: app.kubernetes.io/component=opentelemetry-collector,app.kubernetes.io/instance=observability.trace,app.kubernetes.io/managed-by=opentelemetry-operator,app.kubernetes.io/name=trace-collector,app.kubernetes.io/part-of=opentelemetry,app.kubernetes.io/version=0.126.0
+      statusReplicas: 1/1
+    version: 0.138.0
+kind: List
+metadata:
+  resourceVersion: ""

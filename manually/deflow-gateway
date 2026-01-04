@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: devflow-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: ingress       # 选择 istio-ingress 的 Pod
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE       # 使用单证书 TLS
+      credentialName: bei-tls   # 指向 Kubernetes Secret 名称
+    hosts:
+    - "*"

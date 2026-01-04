@@ -1,0 +1,23 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: kubernetes-dashboard
+  namespace: istio-system
+spec:
+  hosts:
+  - "kubernetes-dashboard.bei.com"
+  gateways:
+  - devflow-gateway   # 使用你已经创建的 Gateway
+  http:
+  - match:
+    - uri:
+        prefix: "/"   # 匹配所有路径
+    headers:
+      request:
+        set:
+          Authorization: "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6InVaX2VqOTdTN0o2Yzd2cnpUQl9Mb3AtTmlUUGhXcmY0MVlKUVZVdFdmejgifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWwiXSwiZXhwIjoxNzk5MDUxMTQ0LCJpYXQiOjE3Njc1MTUxNDQsImlzcyI6Imh0dHBzOi8va3ViZXJuZXRlcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwianRpIjoiZWUyZmJmYTgtNjViZC00ZTk2LWFiN2ItYjZiNjExZDg5ODM1Iiwia3ViZXJuZXRlcy5pbyI6eyJuYW1lc3BhY2UiOiJjb21tb24iLCJzZXJ2aWNlYWNjb3VudCI6eyJuYW1lIjoiZGVmYXVsdCIsInVpZCI6IjllMGE1NDVkLWQ1MTEtNDRjOS1hZjdmLTJjNzY0MzBjMWI5OCJ9fSwibmJmIjoxNzY3NTE1MTQ0LCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6Y29tbW9uOmRlZmF1bHQifQ.YqsiphLmytpE4K6LlFyH2yoEnP7UEjaHiLu-qpY4_YqHuZ1PvyaTiOoc4jYjkAzaruTfSNuL2hzGvM0FSeUKTs6hFQ2ydpROFfLEW_h5T8-2tiDuzMoAO9gvDpHZhjscsyfruSUg5DttdlL6sPynFAd9KHZIMC5mMS5_-NFrvrcFV9zjhdnh61nCFkBW1vBA6RD7ScJsdxXxNoAnSLLz1odtnWnQYb-a2pBQMOQamzttGr7gnOWquWJMGHhdPemiwwYQa_38swikK5YPAqVR7Osv2gORFUuk7j_DchUc6hXfBDxmdHdlTux_N91ouAG0Ti2mLsZ2E2y1ehYp7QbhVQ"  # 这里替换为实际 token
+    route:
+    - destination:
+        host: kubernetes-dashboard-kong-proxy.kube-system.svc.cluster.local
+        port:
+          number: 80

@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: metrics-server  # Argo CD应用名称
-  namespace: argo-cd  # Argo CD自身的命名空间
+  namespace: argocd  # Argo CD自身的命名空间
 spec:
   project: monitoring  # 所属Argo CD项目（默认即可）
   source:
