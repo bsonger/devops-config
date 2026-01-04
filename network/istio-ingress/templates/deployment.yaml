@@ -83,12 +83,14 @@ spec:
               - ALL
             allowPrivilegeEscalation: false
             privileged: false
-            readOnlyRootFilesystem: true
+            readOnlyRootFilesystem: false
             {{- if not (eq (.Values.platform | default "") "openshift") }}
-            runAsUser: 1337
-            runAsGroup: 1337
+            runAsUser: 0
+            capabilities:
+              add: [ "NET_BIND_SERVICE" ]
+            allowPrivilegeEscalation: true
             {{- end }}
-            runAsNonRoot: true
+            runAsNonRoot: false
           {{- end }}
           env:
           {{- with .Values.networkGateway }}
@@ -106,6 +108,10 @@ spec:
           - containerPort: 15090
             protocol: TCP
             name: http-envoy-prom
+          - containerPort: 443         # 新增容器端口
+            hostPort: 443              # 映射到宿主机 443
+            name: https
+            protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.volumeMounts }}

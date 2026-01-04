@@ -2531,7 +2531,12 @@ repoServer:
      - name: devflow-plugin
        command:
          - "/var/run/argocd/argocd-cmp-server"
-       image: registry.cn-hangzhou.aliyuncs.com/devflow/devflow-plugin:devflow-plugin2026010220052255
+       image: registry.cn-hangzhou.aliyuncs.com/devflow/devflow-plugin:devflow-plugin2026010315360851
+       env:
+         - name: PARAM_DEVFLOW_ADDRESS
+           value: http://devflow.applications.svc.cluster.local:8080
+         - name: PARAM_CONSUL_ADDRESS
+           value: http://consul-consul-server.consul.svc.cluster.local:8500
        securityContext:
          runAsNonRoot: true
          runAsUser: 999

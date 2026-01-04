@@ -53,7 +53,7 @@ iptablesRandomFully: false
 # @default -- `"~/.kube/config"`
 kubeConfigPath: ""
 # -- (string) Kubernetes service host - use "auto" for automatic lookup from the cluster-info ConfigMap
-k8sServiceHost: "192.168.1.4"
+k8sServiceHost: "192.168.1.6"
 # @schema
 # type: [string, integer]
 # @schema
@@ -1226,7 +1226,7 @@ hubble:
       # -- Create ServiceMonitor resources for Prometheus Operator.
       # This requires the prometheus CRDs to be available.
       # ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml)
-      enabled: true
+      enabled: false
       # -- Labels to add to ServiceMonitor hubble
       labels: {}
       # -- Annotations to add to ServiceMonitor hubble
@@ -1617,7 +1617,7 @@ hubble:
       serviceMonitor:
         # -- Enable service monitors.
         # This requires the prometheus CRDs to be available (see https://github.com/prometheus-operator/prometheus-operator/blob/main/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml)
-        enabled: true
+        enabled: false
         # -- Labels to add to ServiceMonitor hubble-relay
         labels: {}
         # -- Annotations to add to ServiceMonitor hubble-relay
@@ -2224,7 +2224,7 @@ prometheus:
   serviceMonitor:
     # -- Enable service monitors.
     # This requires the prometheus CRDs to be available (see https://github.com/prometheus-operator/prometheus-operator/blob/main/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml)
-    enabled: true
+    enabled: false
     # -- Labels to add to ServiceMonitor cilium-agent
     labels: {}
     # -- Annotations to add to ServiceMonitor cilium-agent
@@ -2539,7 +2539,7 @@ envoy:
       # This requires the prometheus CRDs to be available (see https://github.com/prometheus-operator/prometheus-operator/blob/main/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml)
       # Note that this setting applies to both cilium-envoy _and_ cilium-agent
       # with Envoy enabled.
-      enabled: true
+      enabled: false
       # -- Labels to add to ServiceMonitor cilium-envoy
       labels: {}
       # -- Annotations to add to ServiceMonitor cilium-envoy
@@ -2854,7 +2854,7 @@ operator:
     serviceMonitor:
       # -- Enable service monitors.
       # This requires the prometheus CRDs to be available (see https://github.com/prometheus-operator/prometheus-operator/blob/main/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml)
-      enabled: true
+      enabled: false
       # -- Labels to add to ServiceMonitor cilium-operator
       labels: {}
       # -- Annotations to add to ServiceMonitor cilium-operator
@@ -3500,7 +3500,7 @@ clustermesh:
       serviceMonitor:
         # -- Enable service monitor.
         # This requires the prometheus CRDs to be available (see https://github.com/prometheus-operator/prometheus-operator/blob/main/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml)
-        enabled: true
+        enabled: false
         # -- Labels to add to ServiceMonitor clustermesh-apiserver
         labels: {}
         # -- Annotations to add to ServiceMonitor clustermesh-apiserver
