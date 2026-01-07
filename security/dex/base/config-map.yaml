@@ -23,7 +23,7 @@ data:
         username: admin
         userID: "1"
     staticClients:
-      - id: argo-cd
+      - id: argocd
         redirectURIs:
           - "https://argo.bei.com/api/dex/callback"  # 外部域名回调
         name: "Argo CD Dex Client"
