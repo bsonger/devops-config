@@ -25,6 +25,6 @@ data:
     staticClients:
       - id: argocd
         redirectURIs:
-          - "https://argo.bei.com/api/dex/callback"  # 外部域名回调
+          - "https://argo.bei.com/auth/callback"   # 外部域名回调
         name: "Argo CD Dex Client"
         secret: "argopassword"
