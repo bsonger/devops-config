@@ -2513,7 +2513,13 @@ repoServer:
   extraArgs: []
 
   # -- Environment variables to pass to repo server
-  env: []
+  env:
+    - name: HTTP_PROXY
+      value: http://192.168.1.2:7890
+    - name: HTTPS_PROXY
+      value: http://192.168.1.2:7890
+    - name: NO_PROXY
+      value: localhost,127.0.0.1,.svc,.cluster.local
 
   # -- envFrom to pass to repo server
   # @default -- `[]` (See [values.yaml])

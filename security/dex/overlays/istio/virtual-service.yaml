@@ -10,7 +10,7 @@ spec:
   http:
   - match:
     - uri:
-        prefix: /dex/
+        prefix: /
     route:
     - destination:
         host: DEX_SERVICE.DEX_NAMESPACE.svc.cluster.local
