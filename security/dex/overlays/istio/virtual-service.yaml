@@ -4,9 +4,9 @@ metadata:
   name: dex
 spec:
   gateways:
-  - kubeflow/kubeflow-gateway
+  - istio-system/devflow-gateway
   hosts:
-  - '*'
+  - 'dex.bei.com'
   http:
   - match:
     - uri:
