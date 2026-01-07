@@ -213,7 +213,7 @@ configs:
     # OIDC configuration as an alternative to dex (optional).
     oidc.config: |
       name: Dex
-      issuer: https://dex.bei.com/dex
+      issuer: http://dex.auth.svc.cluster.local:5556/dex
       clientID: argocd
       clientSecret: argopassword  # 明文写死
       requestedScopes:
