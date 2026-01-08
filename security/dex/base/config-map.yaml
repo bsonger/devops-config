@@ -4,7 +4,7 @@ metadata:
   name: dex
 data:
   config.yaml: |
-    issuer: http://dex.auth.svc.cluster.local:5556/dex
+    issuer: https://dex.bei.com/dex
     storage:
       type: kubernetes
       config:
@@ -19,7 +19,7 @@ data:
     enablePasswordDB: true
     staticPasswords:
       - email: admin@example.com
-        hash: $2a$12$y3q2gWj2i8z7SxF3dZg8Oexu6hslK8w4hL4i8S/EO5qQ1M.3XcFzO # bcrypt(admin)
+        hash: $2y$12$ex0PpqjVkBWwC18sStRujeFLKClHaWgymwhteFQZswOm/3tiQPMb6
         username: admin
         userID: "1"
     staticClients:
