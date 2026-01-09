@@ -59,7 +59,7 @@ global:
     # -- If defined, a repository applied to all Argo CD deployments
     repository: quay.io/argoproj/argocd
     # -- Overrides the global Argo CD image tag whose default is the chart appVersion
-    tag: ""
+    tag: "v3.2.3"
     # -- If defined, a imagePullPolicy applied to all Argo CD deployments
     imagePullPolicy: IfNotPresent
 
@@ -96,10 +96,10 @@ global:
   #  fsGroup: 999
 
   # -- Mapping between IP and hostnames that will be injected as entries in the pod's hosts files
-  hostAliases: []
-  # - ip: 10.20.30.40
-  #   hostnames:
-  #   - git.myhostname
+  hostAliases:
+   - ip: 192.168.1.2
+     hostnames:
+     - dex.bei.com
 
   # Configure dual-stack used by all component services
   dualStack:
@@ -169,6 +169,8 @@ configs:
     # -- Create the argocd-cm configmap for [declarative setup]
     create: true
 
+    oidc.tls.insecure.skip.verify: "true"
+
     # -- Annotations to be added to argocd-cm configmap
     annotations: {}
 
@@ -211,11 +213,17 @@ configs:
 #           - name: your-github-org
 
     # OIDC configuration as an alternative to dex (optional).
+    resource.customizations: |
+      apiextensions.k8s.io/CustomResourceDefinition:
+        ignoreDifferences: |
+          jqPathExpressions:
+            - .spec.preserveUnknownFields
     oidc.config: |
       name: Dex
-      issuer: http://192.168.1.2:31131/dex
+      issuer: https://dex.bei.com/dex
       clientID: argocd
       clientSecret: argopassword  # 明文写死
+      rootCA: /app/config/tls/dex.crt
       requestedScopes:
         - openid
         - profile
@@ -402,11 +410,26 @@ configs:
 
     # -- TLS certificates for Git repositories
     # @default -- `{}` (See [values.yaml])
-    certificates: {}
-      # server.example.com: |
-      #   -----BEGIN CERTIFICATE-----
-      #   ...
-      #   -----END CERTIFICATE-----
+    certificates:
+      dex.crt: |
+        -----BEGIN CERTIFICATE-----
+        MIIC6DCCAdCgAwIBAgIQAXebYJYOcc97jGvw2CR6XzANBgkqhkiG9w0BAQsFADAU
+        MRIwEAYDVQQDDAkqLmJlaS5jb20wHhcNMjUxMTAxMTgyMDQ5WhcNMjcxMTAxMTgy
+        MDQ5WjAUMRIwEAYDVQQDDAkqLmJlaS5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IB
+        DwAwggEKAoIBAQCadmbh9UjaH8gjkEw/LYehM7m/RqnYTu4Oagw6uBeGzUmDY3gK
+        4RIqobpRGCwuhnXJ9yseZPSwc0GSHZ4KIZt1P8AQISXNUY6yojLKX/hujg1+7PGr
+        AIAm74cefkhAl1jNUxzpEz77cy+wNLVv9cwqHt0SqpM6O9EPa9YdCaPNUMnq2Xta
+        U0BemU+Bp1+ZtM/Ec+GB2heHQ+CI/Z0USZLEGYUVLZLSMYdF+2KithRsh+PGv9Co
+        a8lEC8M18M/92EyY8K3TetKVK58+O8b3PqHO2St9P2wSyUuOihPuVBxfSrYhM2xM
+        /LRKlXMUaPFToBAriAqvOOxRH5Y8/vlyxAVNAgMBAAGjNjA0MA4GA1UdDwEB/wQE
+        AwIFoDAMBgNVHRMBAf8EAjAAMBQGA1UdEQQNMAuCCSouYmVpLmNvbTANBgkqhkiG
+        9w0BAQsFAAOCAQEAmPCm9OcqtjsTULXFcWRlM0czzPvrWG8YS9LUk0k0W2SoluTl
+        kiZ6KuXINY0w4WcJJU0KJOSDXNdcsQe/KbPUKSFIN+kJ4uaHhUcU0H1xDe8O5sY9
+        4ScqZgGcJ3F9I0mhO4gJEIh6LcssMmlD9PTmDM/sm+3gOq9VgdivYHvy8P1EgToE
+        NqYJctDHpQopKjX4G9fdvSqxk2oV/gspgAe9/Ouckp8XvQaEsDAsTkItK8tfk9Xg
+        C5bsTCGlJRN+BzAuYzs2HJMkbudi2hvv0xHoze4mzqUUtfDvjLExCOVKwk+DpNee
+        30Fnh90nz1IvSnOjR/w7usIZ40z91LqNU4yeOQ==
+        -----END CERTIFICATE----
 
   # ConfigMap for Config Management Plugins
   # Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/config-management-plugins/
@@ -1842,13 +1865,7 @@ server:
   extraArgs: []
 
   # -- Environment variables to pass to Argo CD server
-  env:
-    - name: HTTP_PROXY
-      value: http://192.168.1.2:7890
-    - name: HTTPS_PROXY
-      value: http://192.168.1.2:7890
-    - name: NO_PROXY
-      value: localhost,127.0.0.1,.svc,.cluster.local
+  env: []
 
   # -- envFrom to pass to Argo CD server
   # @default -- `[]` (See [values.yaml])
