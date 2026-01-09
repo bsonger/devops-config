@@ -6,9 +6,9 @@ metadata:
 spec:
   project: infra
   source:
-    repoURL: git@github.com:bsonger/devops-config.git
+    repoURL: git@github.com:bsonger/infra.git
     targetRevision: main
-    path: ./storage/local-path-storage
+    path: ./local-path-storage
   destination:
     server: https://kubernetes.default.svc
     namespace: local-path-storage

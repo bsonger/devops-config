@@ -213,11 +213,11 @@ configs:
 #           - name: your-github-org
 
     # OIDC configuration as an alternative to dex (optional).
-    resource.customizations: |
-      apiextensions.k8s.io/CustomResourceDefinition:
-        ignoreDifferences: |
-          jqPathExpressions:
-            - .spec.preserveUnknownFields
+#    resource.customizations: |
+#      apiextensions.k8s.io/CustomResourceDefinition:
+#        ignoreDifferences: |
+#          jqPathExpressions:
+#            - .spec.preserveUnknownFields
     oidc.config: |
       name: Dex
       issuer: https://dex.bei.com/dex

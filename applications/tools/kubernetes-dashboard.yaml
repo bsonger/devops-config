@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cilium
+  name: kubernetes-dashboard
   namespace: argocd
 spec:
-  project: infra
+  project: tools
   source:
-    repoURL: git@github.com:bsonger/infra.git
+    repoURL: git@github.com:bsonger/tools.git
     targetRevision: main
-    path: ./cilium
+    path: ./kubernetes-dashboard
     helm:
       valueFiles:
         - values.yaml

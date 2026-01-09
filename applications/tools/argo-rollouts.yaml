@@ -4,11 +4,11 @@ metadata:
   name: argo-rollouts
   namespace: argocd
 spec:
-  project: default
+  project: tools
   source:
-    repoURL: git@github.com:bsonger/devops-config.git
+    repoURL: git@github.com:bsonger/tools.git
     targetRevision: main
-    path: ./tools/argo-rollouts
+    path: ./argo-rollouts
     helm:
       valueFiles:
         - values.yaml

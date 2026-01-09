@@ -6,9 +6,9 @@ metadata:
 spec:
   project: monitoring
   source:
-    repoURL: git@github.com:bsonger/devops-config.git
+    repoURL: git@github.com:bsonger/monitoring.git
     targetRevision: main
-    path: ./monitoring/tempo-distributed
+    path: ./tempo
     helm:
       valueFiles:
         - values.yaml

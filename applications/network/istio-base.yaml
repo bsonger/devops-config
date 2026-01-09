@@ -6,9 +6,9 @@ metadata:
 spec:
   project: infra
   source:
-    repoURL: git@github.com:bsonger/devops-config.git
+    repoURL: git@github.com:bsonger/infra.git
     targetRevision: main
-    path: ./network/istio-base
+    path: ./istio-base
     helm:
       valueFiles:
         - values.yaml

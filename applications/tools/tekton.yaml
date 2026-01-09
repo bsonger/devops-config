@@ -4,14 +4,14 @@ metadata:
   name: tekton
   namespace: argocd
 spec:
-  project: default
+  project: tools
   source:
-    repoURL: git@github.com:bsonger/devops-config.git
+    repoURL: git@github.com:bsonger/tools.git
     targetRevision: main
     path: ./tekton
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: tekton-pipelines
   syncPolicy:
     automated:
       prune: true          # 自动删除未在 Git 中定义的资源

@@ -6,9 +6,9 @@ metadata:
 spec:
   project: monitoring
   source:
-    repoURL: git@github.com:bsonger/devops-config.git
+    repoURL: git@github.com:bsonger/monitoring.git
     targetRevision: main
-    path: ./monitoring/grafana
+    path: ./grafana
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
