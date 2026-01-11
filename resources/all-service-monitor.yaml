@@ -1,0 +1,42 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: devflow
+  namespace: monitoring
+spec:
+  namespaceSelector:
+    any: true
+  selector:
+    matchLabels:
+      monitoring: "enabled"
+  endpoints:
+    - port: metrics
+      interval: 30s
+      honorLabels: true
+      relabelings:
+        # 只抓取注解 prometheus.io/scrape=true 的 Pod
+        - sourceLabels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+          regex: "true"
+          action: keep
+
+        # prometheus.io/path -> __metrics_path__
+        - sourceLabels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+          targetLabel: __metrics_path__
+          action: replace
+
+        # prometheus.io/port -> __address__ 的端口
+        - sourceLabels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
+          targetLabel: __address__
+          regex: (.+)
+          replacement: $1
+          action: replace
+
+        # prometheus.io/scheme -> __scheme__
+        - sourceLabels: [__meta_kubernetes_pod_annotation_prometheus_io_scheme]
+          targetLabel: __scheme__
+          action: replace
+
+        # prometheus.io/job -> job
+        - sourceLabels: [__meta_kubernetes_pod_annotation_prometheus_io_job]
+          targetLabel: job
+          action: replace

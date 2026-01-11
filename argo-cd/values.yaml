@@ -213,11 +213,16 @@ configs:
 #           - name: your-github-org
 
     # OIDC configuration as an alternative to dex (optional).
-#    resource.customizations: |
-#      apiextensions.k8s.io/CustomResourceDefinition:
-#        ignoreDifferences: |
-#          jqPathExpressions:
-#            - .spec.preserveUnknownFields
+    resource.customizations: |
+      networking.istio.io/VirtualService:
+        ignoreDifferences: |
+          jsonPointers:
+            - /spec/http/0/route/0/weight
+            - /spec/http/0/route/1/weight
+      apiextensions.k8s.io/CustomResourceDefinition:
+        ignoreDifferences: |
+          jqPathExpressions:
+            - .spec.preserveUnknownFields
     oidc.config: |
       name: Dex
       issuer: https://dex.bei.com/dex
@@ -2559,7 +2564,7 @@ repoServer:
      - name: devflow-plugin
        command:
          - "/var/run/argocd/argocd-cmp-server"
-       image: registry.cn-hangzhou.aliyuncs.com/devflow/devflow-plugin:devflow-plugin2026010315360851
+       image: registry.cn-hangzhou.aliyuncs.com/devflow/devflow-plugin:devflow-plugin2026011105113040
        env:
          - name: PARAM_DEVFLOW_ADDRESS
            value: http://devflow.applications.svc.cluster.local:8080
