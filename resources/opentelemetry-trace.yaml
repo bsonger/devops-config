@@ -6,19 +6,17 @@ metadata:
 spec:
   mode: deployment
   replicas: 1
-  image: otel/opentelemetry-collector-k8s:0.126.0
+  image: otel/opentelemetry-collector-contrib:0.143.0
 
-  # 暴露端口
   ports:
     - name: otlp-grpc
       port: 4317
-      targetPort: 4317
     - name: otlp-http
       port: 4318
-      targetPort: 4318
     - name: zipkin
       port: 9411
-      targetPort: 9411
+    - name: metrics
+      port: 8889
 
   config:
     receivers:
@@ -29,32 +27,104 @@ spec:
           http:
             endpoint: 0.0.0.0:4318
       zipkin:
-        endpoint: "0.0.0.0:9411"
+        endpoint: 0.0.0.0:9411
+      nop: {}
 
     processors:
       memory_limiter:
         check_interval: 1s
         limit_percentage: 75
         spike_limit_percentage: 15
+      filter/ottl:
+        error_mode: ignore
+        metrics:
+          datapoint:
+            - 'attributes["http.response.status_code"] == nil and attributes["http.route"] == nil'
+      metricsgeneration:
+        rules:
+          - name: http_requests_total
+            unit: "1"               # 因为是计数，单位用字符串 "1"
+            type: scale
+            metric1: traces_span_metrics_calls_total
+            scale_by: 1             # 直接复制，不做放大
+
       resource:
         attributes:
           - key: service.namespace
             value: observability
             action: insert
+
       batch:
         timeout: 10s
         send_batch_size: 512
 
+    connectors:
+      # spanmetrics 转 metrics
+      spanmetrics:
+        histogram:
+          dimensions:
+            - name: http.request.method
+            - name: http.response.status_code
+            - name: http.route
+          explicit:
+            buckets: [100us, 1ms, 2ms, 6ms, 10ms, 100ms, 250ms]
+        calls_dimensions:
+          - name: http.request.method
+          - name: http.response.status_code
+          - name: http.route
+        exemplars:
+          enabled: true
+        exclude_dimensions:
+        - 'status.code'
+        - 'span.name'
+        - 'span.kind'
+        - 'span.instrumentation.scope.name'
+        - 'span.instrumentation.scope.version'
+        - 'otel.scope.name'
+        aggregation_temporality: "AGGREGATION_TEMPORALITY_CUMULATIVE"
+        metrics_flush_interval: 15s
+        metrics_expiration: 5m
+        events:
+          enabled: true
+          dimensions:
+            - name: exception.type
+            - name: exception.message
+        resource_metrics_key_attributes:
+          - service.name
+          - service.namespace
+          - http.request.method
+          - http.response.status_code
+          - http.route
+        include_instrumentation_scope:
+          - gin
+        add_resource_attributes: true
+
     exporters:
-      debug: {}
+      # 发 trace 到 Tempo
       otlp:
         endpoint: tempo-distributor-discovery.monitoring.svc.cluster.local:4317
         tls:
           insecure: true
 
+      # Prometheus metrics
+      prometheus:
+        endpoint: 0.0.0.0:8889
+        resource_to_telemetry_conversion:
+          enabled: true
+
     service:
       pipelines:
         traces:
           receivers: [otlp, zipkin]
-          processors: [memory_limiter, batch]
-          exporters: [otlp]
+          processors:
+            - memory_limiter
+            - batch
+          exporters: [spanmetrics, otlp]
+
+        metrics:
+          receivers: [spanmetrics]
+          processors:
+            - batch
+            - filter/ottl
+            - metricsgeneration
+          exporters: [prometheus]

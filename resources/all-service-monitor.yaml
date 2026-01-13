@@ -24,12 +24,11 @@ spec:
           targetLabel: __metrics_path__
           action: replace
 
-        # prometheus.io/port -> __address__ 的端口
-        - sourceLabels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
-          targetLabel: __address__
-          regex: (.+)
-          replacement: $1
+        - sourceLabels: [__meta_kubernetes_pod_ip, __meta_kubernetes_pod_annotation_prometheus_io_port]
           action: replace
+          targetLabel: __address__
+          regex: (.+);(.+)
+          replacement: $1:$2
 
         # prometheus.io/scheme -> __scheme__
         - sourceLabels: [__meta_kubernetes_pod_annotation_prometheus_io_scheme]

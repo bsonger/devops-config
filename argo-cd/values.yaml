@@ -2564,7 +2564,7 @@ repoServer:
      - name: devflow-plugin
        command:
          - "/var/run/argocd/argocd-cmp-server"
-       image: registry.cn-hangzhou.aliyuncs.com/devflow/devflow-plugin:devflow-plugin2026011105113040
+       image: registry.cn-hangzhou.aliyuncs.com/devflow/devflow-plugin:devflow-plugin2026011316465176
        env:
          - name: PARAM_DEVFLOW_ADDRESS
            value: http://devflow.applications.svc.cluster.local:8080

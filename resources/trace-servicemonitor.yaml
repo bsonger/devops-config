@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: trace-collector
+  namespace: observability
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: opentelemetry-collector
+  namespaceSelector:
+    matchNames:
+      - observability
+  endpoints:
+    - port: metrics           # 对应 Service 中的 metrics port
+      interval: 15s           # 抓取频率
+      path: /metrics          # 默认 Prometheus metrics path
+      honorLabels: true
