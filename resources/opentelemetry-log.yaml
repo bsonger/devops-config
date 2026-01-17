@@ -1,0 +1,79 @@
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: logs
+  namespace: observability
+spec:
+  mode: deployment
+  replicas: 1
+
+  image: otel/opentelemetry-collector-contrib:0.143.0
+
+  config:
+    receivers:
+      # Alloy → OTel 使用 OTLP
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+
+    processors:
+      # Kubernetes 元信息补全（非常关键）
+      k8sattributes:
+        auth_type: serviceAccount
+        passthrough: false
+        extract:
+          metadata:
+            - k8s.namespace.name
+            - k8s.pod.name
+            - k8s.node.name
+            - k8s.container.name
+            - k8s.pod.uid
+        pod_association:
+          - sources:
+              - from: resource_attribute
+                name: k8s.pod.uid
+          - sources:
+              - from: connection
+
+      # 统一资源属性（env / cluster / service）
+      resource:
+        attributes:
+          - key: cluster
+            value: prod-cluster
+            action: upsert
+          - key: telemetry.sdk
+            value: alloy
+            action: upsert
+
+      # 批处理（生产必须）
+      batch:
+        send_batch_size: 1024
+        timeout: 5s
+
+    exporters:
+      # 👉 方案一：发给 Loki（推荐你现在用）
+      loki:
+        endpoint: http://loki-distributor.monitoring.svc.cluster.local:3100/loki/api/v1/push
+        labels:
+          attributes:
+            k8s.namespace.name: namespace
+            k8s.pod.name: pod
+            k8s.container.name: container
+            k8s.node.name: node
+            cluster: cluster
+            service.name: service
+
+      # 👉 方案二：发给 Elasticsearch（可选）
+      # elasticsearch:
+      #   endpoints: ["http://elasticsearch.monitoring.svc:9200"]
+      #   logs_index: otel-logs-%{+yyyy.MM.dd}
+
+    service:
+      pipelines:
+        logs:
+          receivers: [otlp]
+          processors: [k8sattributes, resource, batch]
+          exporters: [loki]

@@ -13,8 +13,6 @@ spec:
       port: 4317
     - name: otlp-http
       port: 4318
-    - name: zipkin
-      port: 9411
     - name: metrics
       port: 8889
 
@@ -35,96 +33,72 @@ spec:
         check_interval: 1s
         limit_percentage: 75
         spike_limit_percentage: 15
-      filter/ottl:
-        error_mode: ignore
-        metrics:
-          datapoint:
-            - 'attributes["http.response.status_code"] == nil and attributes["http.route"] == nil'
-      metricsgeneration:
-        rules:
-          - name: http_requests_total
-            unit: "1"               # 因为是计数，单位用字符串 "1"
-            type: scale
-            metric1: traces_span_metrics_calls_total
-            scale_by: 1             # 直接复制，不做放大
 
-      resource:
-        attributes:
-          - key: service.namespace
-            value: observability
-            action: insert
+
+      # ---------- METRICS ----------
+      metricstransform:
+        transforms:
+          - include: traces.span.metrics.calls
+            action: update
+            new_name: http_requests_total
+          - include: traces.span.metrics.duration
+            action: update
+            new_name: http_request_duration
 
       batch:
         timeout: 10s
         send_batch_size: 512
 
     connectors:
-      # spanmetrics 转 metrics
       spanmetrics:
         histogram:
+          explicit:
+            buckets: [100us, 1ms, 2ms, 6ms, 10ms, 100ms, 250ms]
           dimensions:
             - name: http.request.method
             - name: http.response.status_code
             - name: http.route
-          explicit:
-            buckets: [100us, 1ms, 2ms, 6ms, 10ms, 100ms, 250ms]
+
         calls_dimensions:
           - name: http.request.method
           - name: http.response.status_code
           - name: http.route
+
         exemplars:
           enabled: true
-        exclude_dimensions:
-        - 'status.code'
-        - 'span.name'
-        - 'span.kind'
-        - 'span.instrumentation.scope.name'
-        - 'span.instrumentation.scope.version'
-        - 'otel.scope.name'
-        aggregation_temporality: "AGGREGATION_TEMPORALITY_CUMULATIVE"
-        metrics_flush_interval: 15s
-        metrics_expiration: 5m
-        events:
-          enabled: true
-          dimensions:
-            - name: exception.type
-            - name: exception.message
+          max_per_data_point: 1
+
+        aggregation_temporality: CUMULATIVE
+
         resource_metrics_key_attributes:
           - service.name
           - service.namespace
-          - http.request.method
-          - http.response.status_code
-          - http.route
-        include_instrumentation_scope:
-          - gin
-        add_resource_attributes: true
 
     exporters:
-      # 发 trace 到 Tempo
+      # ---- traces ----
       otlp:
-        endpoint: tempo-distributor-discovery.monitoring.svc.cluster.local:4317
+        endpoint: tempo-distributor.monitoring.svc.cluster.local:4317
         tls:
           insecure: true
 
-      # Prometheus metrics
+      # ---- metrics ----
       prometheus:
         endpoint: 0.0.0.0:8889
+        enable_open_metrics: true
         resource_to_telemetry_conversion:
           enabled: true
+
+      debug:
+        verbosity: detailed
 
     service:
       pipelines:
         traces:
-          receivers: [otlp, zipkin]
-          processors:
-            - memory_limiter
-            - batch
+          receivers: [otlp]
+          processors: [memory_limiter, batch]
           exporters: [spanmetrics, otlp]
 
         metrics:
           receivers: [spanmetrics]
-          processors:
-            - batch
-            - filter/ottl
-            - metricsgeneration
+          processors: [batch, metricstransform]
           exporters: [prometheus]
